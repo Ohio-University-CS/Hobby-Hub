@@ -10,6 +10,8 @@ import { toast } from "sonner"
 import { signUp } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 
+import Link from "next/link";
+
 export const RegisterForm = () => {
 
     const [isPending, setIsPending] = useState(false);
@@ -47,25 +49,55 @@ export const RegisterForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" />
-            </div>
+        <div className="flex items-center justify-center h-screen bg-white overflow-hidden">
+            <div className="w-full max-w-sm p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" name="email" />
-            </div>
+                <div className="space-y-1 text-center">
+                    <h1 className="text-2xl font-semibold tracking-tight">Register</h1>
+                </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input type="password" id="password" name="password" />
-            </div>
+                <form onSubmit={handleSubmit} className="space-y-4">
 
-            <Button type="submit" className="w-full bg-black text-white" disabled={isPending}>
-                Register
-            </Button>
-        </form>
+                    <div className="relative">
+                        <Input
+                            type="name"
+                            name="name"
+                            placeholder="Name"
+                            className="h-11"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <Input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            className="h-11"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <Input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            className="h-11"
+                        />
+                    </div>
+
+                    <Button type="submit" className="w-full h-11 bg-black text-white hover:bg-black/90">
+                        Register
+                    </Button>
+
+                    <p className="text-muted-foreground text-sm">
+                        Have an account?{" "}
+                        <Link href="/auth/login" className="hover:text-foreground font-semibold">
+                            Login
+                        </Link>
+                    </p>
+
+                </form>
+            </div>
+        </div>
     );
 }

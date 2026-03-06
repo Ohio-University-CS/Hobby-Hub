@@ -10,6 +10,8 @@ import { toast } from "sonner"
 import { signIn } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 
+import Link from "next/link";
+
 export const LoginForm = () => {
 
     const [isPending, setIsPending] = useState(false);
@@ -36,28 +38,72 @@ export const LoginForm = () => {
                 onError: (ctx) => { toast.error(ctx.error.message); },
                 onSuccess: () => {
                     toast.success("Login successful!")
-                    router.push("/auth/profile") 
+                    router.push("/auth/profile")
                 },
             }
         );
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
+        <div className="flex items-center justify-center min-h-screen bg-white">
+            <div className="w-full max-w-sm p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" id="email" name="email" />
+                <div className="space-y-1 text-center">
+                    <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+
+                    <div className="relative">
+                        <Input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            className="h-11"
+                        />
+                    </div>
+
+                    <div className="relative">
+                        <Input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            className="h-11"
+                        />
+                    </div>
+
+                    <Button type="submit" className="w-full h-11 bg-black text-white hover:bg-black/90">
+                        Login
+                    </Button>
+
+                    <p className="text-muted-foreground text-sm">
+                        Don't have an account?{" "}
+                        <Link href="/auth/register" className="hover:text-foreground font-semibold">
+                            Register
+                        </Link>
+                    </p>
+
+                </form>
             </div>
+        </div>
+    )
 
-            <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input type="password" id="password" name="password" />
-            </div>
+    // return (
+    //     <form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
 
-            <Button type="submit" className="w-full bg-black text-white">
-                Login
-            </Button>
-        </form>
-    );
+    //         <div className="space-y-2">
+    //             <Label htmlFor="email">Email</Label>
+    //             <Input type="email" id="email" name="email" />
+    //         </div>
+
+    //         <div className="space-y-2">
+    //             <Label htmlFor="password">Password</Label>
+    //             <Input type="password" id="password" name="password" />
+    //         </div>
+
+    //         <Button type="submit" className="w-full bg-black text-white">
+    //             Login
+    //         </Button>
+    //     </form>
+    // );
 }
