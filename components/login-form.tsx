@@ -34,7 +34,10 @@ export const LoginForm = () => {
                 onRequest: () => { setIsPending(true) },
                 onResponse: () => { setIsPending(false) },
                 onError: (ctx) => { toast.error(ctx.error.message); },
-                onSuccess: () => { router.push("/auth/profile") },
+                onSuccess: () => {
+                    toast.success("Login successful!")
+                    router.push("/auth/profile") 
+                },
             }
         );
     }

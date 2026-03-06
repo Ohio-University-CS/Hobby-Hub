@@ -38,7 +38,10 @@ export const RegisterForm = () => {
                 onRequest: () => { setIsPending(true) },
                 onResponse: () => { setIsPending(false) },
                 onError: (ctx) => { toast.error(ctx.error.message); },
-                onSuccess: () => { router.push("/auth/profile") },
+                onSuccess: () => { 
+                    toast.success("Registration complete!")
+                    router.push("/auth/profile") 
+                },
             }
         );
     }
