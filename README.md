@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## This is the Hobby Hub Development Repository.
+
+Hobby Hub is a welcoming online space for hobbyists. Content is promoted on popularity and user interests, driven via tags.
 
 ## Getting Started
 
