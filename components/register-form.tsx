@@ -52,9 +52,10 @@ export const RegisterForm = () => {
         <div className="flex items-center justify-center h-screen bg-white overflow-hidden">
             <div className="w-full max-w-sm p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-                <div className="space-y-1 text-center">
-                    <h1 className="text-2xl font-semibold tracking-tight">Register</h1>
+                <div className="logo items-center justify-center w-full">
+                    <img src={'/assets/HobbyHubLight.png'} width="100" height="100" className="w-full"/>
                 </div>
+
 
                 <form onSubmit={handleSubmit} className="space-y-4">
 

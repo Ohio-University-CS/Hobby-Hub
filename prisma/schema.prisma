@@ -13,33 +13,79 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id            String     @id
+  name          String
+  email         String
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  posts         Post[]
+  comments      Comment[]
+  reactions     Reaction[]
+
+  @@unique([email])
+  @@map("user")
+}
+
 model Post {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title   String
-  content String
-  user    User?   @relation(fields: [userId], references: [id])
-  userId  String?
+  title     String
+  content   String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  comments  Comment[]
+  media     Media[]
+  reactions Reaction[]
 
   @@map("posts")
 }
 
-model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  posts         Post[]
+model Media {
+  id     String    @id @default(cuid())
+  url    String
+  type   MediaType
+  postId String
 
-  @@unique([email])
-  @@map("user")
+  post Post @relation(fields: [postId], references: [id])
+}
+
+model Comment {
+  id     String @id @default(cuid())
+  body   String
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Reaction {
+  id     String       @id @default(cuid())
+  type   ReactionType
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, postId])
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
 }
 
 model Session {

@@ -10,6 +10,8 @@ import { toast } from "sonner"
 import { signIn } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 
+import logo from './include/HobbyHubLight.png'
+
 import Link from "next/link";
 
 export const LoginForm = () => {
@@ -48,8 +50,8 @@ export const LoginForm = () => {
         <div className="flex items-center justify-center min-h-screen bg-white">
             <div className="w-full max-w-sm p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-                <div className="space-y-1 text-center">
-                    <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
+                <div className="logo items-center justify-center w-full">
+                    <img src={'/assets/HobbyHubLight.png'} width="100" height="100" className="w-full"/>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
