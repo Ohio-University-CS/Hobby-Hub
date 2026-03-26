@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-export default function LandingPage() {
+export const LandingPage = () => {
     return (
         <section className = "min-h-screen flex flex-col items-center justify-center px-6 py-24">
             <div className = "max-w-3xl w-full text-center flex flex-col items-center space-y-4">
