@@ -50,7 +50,7 @@ export const ManagePostsGrid = () => {
     if(loading) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground">Loading posts..</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">Loading posts..</p>
             </div>
         );
     }
@@ -58,7 +58,7 @@ export const ManagePostsGrid = () => {
     if(posts.length === 0) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                    <p className = "text-muted-foreground">No posts found</p>
+                    <p className = "text-muted-foreground text-2xl font-semibold">No posts found.</p>
             </div>
         );
     }

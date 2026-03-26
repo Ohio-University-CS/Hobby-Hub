@@ -5,7 +5,7 @@ const PostPage = () => {
         <div className="min-h-screen bg-gray-50">
             <ViewPostPage/>
         </div>
-    )
-}
+    );
+};
 
 export default PostPage;

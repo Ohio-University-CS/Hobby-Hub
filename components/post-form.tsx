@@ -81,7 +81,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     if(loading) {
         return (
             <div className="flex items-center justify-center h-screen">
-                <p className="text-muted-foreground">Loading!!</p>
+                <p className="text-muted-foreground text-2xl font-semibold">Loading..</p>
             </div>
         );
     }

@@ -45,7 +45,7 @@ export const ExplorePostsGrid = () => {
     if(loading) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground">Loading posts..</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">Loading posts..</p>
             </div>
         )
     }
@@ -53,7 +53,7 @@ export const ExplorePostsGrid = () => {
     if(posts.length === 0) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground">No posts found</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">No posts found</p>
             </div>
         );
     }
@@ -62,7 +62,7 @@ export const ExplorePostsGrid = () => {
         <div className = "p-8">
             <h1 className = "text-2xl font-semibold mb-6">Posts</h1>
 
-            <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))"}}>
+            <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
                 {posts.map(post=> (
                     <Card
                         key = {post.id}
