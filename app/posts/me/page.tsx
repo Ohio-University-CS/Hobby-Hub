@@ -1,4 +1,3 @@
-import React from "react";
 import { ManagePostsGrid } from "@/components/manage-posts-grid";
 
 const ManagePostsPage = () => {

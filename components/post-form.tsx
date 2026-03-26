@@ -10,11 +10,7 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { error } from "console";
 
-interface PostFormProps {
-    postId?: string;
-}
-
-export const PostForm = ({ postId }: PostFormProps) => {
+export const PostForm = ({ postId }: {postId?: string}) => {
     
     const isEditing = !!postId;
 

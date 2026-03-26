@@ -1,11 +1,7 @@
 import { PostForm } from "@/components/post-form";
 import React from "react";
 
-interface PageProps {
-    params: Promise<{id: string}>;
-}
-
-const EditPostPage = async ({params}: PageProps) => {
+const EditPostPage = async ({params}: {params: Promise<{id: string}>;}) => {
     const {id} = await params;
 
     return <PostForm postId={id}/>;
