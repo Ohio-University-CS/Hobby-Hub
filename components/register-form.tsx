@@ -42,7 +42,7 @@ export const RegisterForm = () => {
                 onError: (ctx) => { toast.error(ctx.error.message); },
                 onSuccess: () => { 
                     toast.success("Registration complete!")
-                    router.push("/auth/profile") 
+                    router.push("/profile") 
                 },
             }
         );
@@ -92,7 +92,7 @@ export const RegisterForm = () => {
 
                     <p className="text-muted-foreground text-sm">
                         Have an account?{" "}
-                        <Link href="/auth/login" className="hover:text-foreground font-semibold">
+                        <Link href="/login" className="hover:text-foreground font-semibold">
                             Login
                         </Link>
                     </p>

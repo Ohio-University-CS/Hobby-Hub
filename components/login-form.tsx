@@ -40,7 +40,7 @@ export const LoginForm = () => {
                 onError: (ctx) => { toast.error(ctx.error.message); },
                 onSuccess: () => {
                     toast.success("Login successful!")
-                    router.push("/auth/profile")
+                    router.push("/profile")
                 },
             }
         );
@@ -80,7 +80,7 @@ export const LoginForm = () => {
 
                     <p className="text-muted-foreground text-sm">
                         Don't have an account?{" "}
-                        <Link href="/auth/register" className="hover:text-foreground font-semibold">
+                        <Link href="/register" className="hover:text-foreground font-semibold">
                             Register
                         </Link>
                     </p>
