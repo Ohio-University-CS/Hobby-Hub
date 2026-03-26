@@ -31,3 +31,25 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(post);
 }
+
+export async function GET(req: NextRequest) {
+    try {
+        const session = await auth.api.getSession({headers: req.headers});
+    
+        if(!session?.user) {
+            return NextResponse.json({error: "Not authorized"}, {status: 401});
+        }
+    
+        const posts = await prisma.post.findMany({
+            where: {userId: session.user.id},
+            include: {user: true},
+            orderBy: {createdAt: "desc"},
+        });
+
+        return NextResponse.json(posts);
+    }
+    catch (err) {
+        console.error(err);
+        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+    }
+}

@@ -3,15 +3,17 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, {params} : {params: {id: string}}) {
+    const { id } = params;
 
-    const session = await auth.api.getSession({headers: req.headers});
+    try {
+        const post = await prisma.post.findUnique({where: {id}});
+        if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
-    if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
-
-    const post = await prisma.post.findUnique({where: {id: params.id}});
-    if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
-
-    return NextResponse.json(post);
+        return NextResponse.json(post);
+    }
+    catch (err) {
+        return NextResponse.json({error: "Failed to load post"}, {status: 500});
+    }
 }
 
 export async function PUT(req: NextRequest, {params} : {params: {id: string}}) {

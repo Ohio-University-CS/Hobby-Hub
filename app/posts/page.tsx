@@ -1,21 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
-
-import { toast } from "sonner"
+import React from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation"
-import { error } from "console";
 
 interface Post {
     id: string;
     title: string;
+    content: string;
 }
 
-export const ManagePostsGrid = () => {
+const PostsPage = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -24,7 +20,7 @@ export const ManagePostsGrid = () => {
     useEffect(() => {
         async function fetchPosts() {
             try {
-                const res = await fetch("/api/posts/me", {
+                const res = await fetch("/api/posts", {
                     credentials: "include",
                 });
 
@@ -50,33 +46,24 @@ export const ManagePostsGrid = () => {
             <div className = "flex items-center justify-center h-screen">
                 <p className = "text-muted-foreground">Loading posts..</p>
             </div>
-        );
+        )
     }
 
     if(posts.length === 0) {
-        return (
-            <div className = "flex items-center justify-center h-screen">
-                    <p className = "text-muted-foreground">No posts found</p>
-            </div>
-        );
+        <div className = "flex items-center justify-center h-screen">
+                <p className = "text-muted-foreground">No posts found</p>
+        </div>
     }
 
-    return (
+     return (
         <div className = "p-8">
-            <h1 className = "text-2xl font-semibold mb-6">Manage Posts</h1>
+            <h1 className = "text-2xl font-semibold mb-6">Posts</h1>
 
             <div className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <div
-                    onClick={() => router.push(`/posts/new`)}
-                    className="cursor-pointer border-dashed border-2 border-neutral-300 rounded-lg shadow hover:shadow-2xl transition p-4 h-40 flex items-center justify-center text-center text-lg font-medium overflow-hidden"
-                >
-                    + New Post
-                </div>
-
                 {posts.map(post=> (
                     <div
                         key = {post.id}
-                        onClick = {() => router.push(`/posts/edit/${post.id}`)}
+                        onClick = {() => router.push(`/posts/${post.id}`)}
                         className = "cursor-pointer bg-white border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition p-4 h-40 flex items-center justify-center text-center text-lg font-medium overflow-hidden"
                     >
                     {post.title}
@@ -85,4 +72,6 @@ export const ManagePostsGrid = () => {
             </div>
         </div>
     );
-};
+}
+
+export default PostsPage;

@@ -31,7 +31,7 @@ export const PostForm = ({ postId }: PostFormProps) => {
 
         async function fetchPost() {
             try {
-                const res = await fetch(`/api/posts${postId}`, {credentials: "include"});
+                const res = await fetch(`/api/posts/${postId}`, {credentials: "include"});
                 if(!res.ok) throw new Error();
 
                 const data = await res.json();
@@ -74,7 +74,7 @@ export const PostForm = ({ postId }: PostFormProps) => {
 
             toast.success(isEditing ? "Post Updated!" : "Post Created!");
 
-            router.push("/posts${data.id}");
+            router.push(`/posts/${data.id}`);
         }
 
         catch (err: any) { toast.error(err.message); }
