@@ -13,7 +13,7 @@ interface Post {
 
 const ViewPostPage = () => {
     const params = useParams();
-    const postId = params.id;
+    const postId = params.id as string;
 
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);

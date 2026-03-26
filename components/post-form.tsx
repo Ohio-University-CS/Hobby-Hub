@@ -59,7 +59,7 @@ export const PostForm = ({ postId }: PostFormProps) => {
             setIsPending(true);
 
             const res = await fetch(
-                isEditing ? `/api/posts/${postId}` : "/api/posts",
+                isEditing ? `${window.location.origin}/api/posts/${postId}` : "${window.location.origin}/api/posts",
                 {
                     method: isEditing ? "PUT" : "POST",
                     headers: { "Content-Type": "application/json"},

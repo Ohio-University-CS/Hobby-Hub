@@ -50,9 +50,11 @@ const PostsPage = () => {
     }
 
     if(posts.length === 0) {
-        <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground">No posts found</p>
-        </div>
+        return (
+            <div className = "flex items-center justify-center h-screen">
+                    <p className = "text-muted-foreground">No posts found</p>
+            </div>
+        );
     }
 
      return (
