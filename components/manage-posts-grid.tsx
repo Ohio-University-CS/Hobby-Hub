@@ -67,7 +67,7 @@ export const ManagePostsGrid = () => {
         <div className = "p-8">
             <h1 className = "text-2xl font-semibold mb-6">Manage Posts</h1>
 
-            <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))"}}>
+            <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
                 <Card
                     onClick={() => router.push(`/posts/new`)}
                     className="cursor-pointer border-dashed border-2 border-neutral-300 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
