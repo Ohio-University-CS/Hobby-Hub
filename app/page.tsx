@@ -1,38 +1,14 @@
-'use client';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import LandingPage from "@/components/landing-page";
+import { DebugDashboard } from "@/components/debug-dashboard";
 
-export default function Page() {
-  
-  const router = useRouter();
+export default async function Page() {
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8 space-y-6">
-      <h1 className="text-4xl font-bold mb-8">Alpha Preview</h1>
+  const session = await auth.api.getSession({headers: await headers()});
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-3xl">
-        <Button onClick={() => router.push("/login")} className="w-full">
-            Login
-        </Button>
+  if(!session?.user) return (<LandingPage/>);
 
-        <Button onClick={() => router.push("/register")} className="w-full">
-            Register
-        </Button>
-
-        <Button onClick={() => router.push("/profile")} className="w-full">
-            Profile
-        </Button>
-
-        <Button onClick={() => router.push("/posts")} className="w-full">
-            All Posts
-        </Button>
-
-        <Button onClick={() => router.push("/posts/me")} className="w-full">
-            My Posts
-        </Button>
-      </div>
-    </div>
-  );
+  return (<DebugDashboard/>)
 }
