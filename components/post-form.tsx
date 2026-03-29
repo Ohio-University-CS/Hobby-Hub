@@ -4,11 +4,15 @@ import React, { useEffect, useState } from "react";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { error } from "console";
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
 
 export const PostForm = ({ postId }: {postId?: string}) => {
     
@@ -101,12 +105,27 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         className="h-11"    
                     />
 
-                    <Input
-                        value = {content}
-                        onChange = {e => setContent(e.target.value)}
-                        placeholder="Content"
-                        className="w-full border rounded-md px-3 py-2"    
-                    />
+                    <div className = "space-y-2">
+                        <textarea
+                            value = {content}
+                            onChange = {e => setContent(e.target.value)}
+                            placeholder = "Write your post in markdown.."
+                            className = "w-full min-h-[150px] border rounded-md px-3 py-2"
+                        />
+                    </div>
+
+                    <div className = "border rounded-md p-4 bg-neutral-50">
+                        <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+
+                        <div className = "prose max-w-none">
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeSanitize]}
+                            >
+                                {content || "Nothing to Preview Yet"}
+                            </ReactMarkdown>
+                        </div>
+                    </div>
 
                     <Button
                         type = "submit"

@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
+
 interface Post {
     id: string;
     title: string;
@@ -60,8 +64,22 @@ export const ViewPostPage = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-8 bg-white rounded-2xl shadow shadow-2xl mt-8">
-            <h1 className="text-3xl font-bold mb-6">{post.title}</h1>
-            <p className="text-lg text-gray-700 whitespace-pre-line">{post.content}</p>
+
+            <h1 className="text-3xl font-bold mb-6">
+                {post.title}
+            </h1>
+
+
+            <div className = "rounded-md p-4 bg-neutral-50">
+                <div className = "prose max-w-none">
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeSanitize]}
+                    >
+                        {post.content || "Nothing to Preview Yet"}
+                    </ReactMarkdown>
+                </div>
+            </div>
         </div>
     );
 };
