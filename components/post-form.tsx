@@ -114,8 +114,9 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         />
                     </div>
 
+                    <p className="text-muted-foreground mb-2">Preview:</p>
+                    
                     <div className = "border rounded-md p-4 bg-neutral-50">
-                        <p className="text-sm text-muted-foreground mb-2">Preview:</p>
 
                         <div className = "prose max-w-none">
                             <ReactMarkdown
