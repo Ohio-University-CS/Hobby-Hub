@@ -82,6 +82,38 @@ export const PostForm = ({ postId }: {postId?: string}) => {
         finally { setIsPending(false); }
     }
 
+    async function handleDelete() {
+    
+        if(!postId) return;
+
+        const confirmed = confirm("Are you sure you want to delete this post?");
+        if(!confirmed) return;
+
+        try {
+            setIsPending(true);
+
+            const res = await fetch(
+                `/api/posts/${postId}`,
+                {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify({title}),
+                    credentials: "include"
+                }
+            );
+
+            const data = await res.json();
+
+            if(!res.ok) throw new Error(data.error || "Failed to delete post.");
+
+            toast.success("Post deleted");
+            router.push("/posts/me");
+        }
+        catch (err: any) { toast.error(err.message); }
+
+        finally { setIsPending(false); }
+    }
+
     if(loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -92,7 +124,29 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-white">
+
+
             <div className="w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
+
+                <Button
+                    variant="outline"
+                    onClick={() => router.push("/posts/me")}
+                    className="bg-black text-white"
+                >
+                    Back
+                </Button>
+
+                {isEditing && (
+                    <Button
+                    variant="outline"
+                    onClick={handleDelete}
+                    disabled={isPending}
+                    className="bg-black text-white"
+                    >
+                        Delete
+                    </Button>
+                )}
+            
                 <h1 className="text-2xl font-semibold">
                     {isEditing ? "Edit Post" : "Create Post"}
                 </h1>
