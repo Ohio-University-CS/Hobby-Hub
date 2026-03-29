@@ -55,14 +55,6 @@ export const ManagePostsGrid = () => {
         );
     }
 
-    if(posts.length === 0) {
-        return (
-            <div className = "flex items-center justify-center h-screen">
-                    <p className = "text-muted-foreground text-2xl font-semibold">No posts found.</p>
-            </div>
-        );
-    }
-
     return (
         <div className = "p-8">
             <h1 className = "text-2xl font-semibold mb-6">Manage Posts</h1>
