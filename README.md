@@ -11,18 +11,22 @@ Hobby Hub is a welcoming online space for hobbyists. Content is promoted on popu
 ### PROJECT SETUP / UPDATING
 Run ```npm start``` in the repository root to install/update any dependencies.
 
-### OPENAI MODERATION
-Then, create a .env file (and make sure it is NEVER included in commits)
-Head over to platform.openai.com, and create a new API key with Moderation privileges.
+Create a .env file (and make sure it is NEVER included in commits)
 
-Paste this key in as:
+### OPENAI MODERATION
+Go to platform.openai.com, and create a new API key with Moderation privileges.
+
+Then, paste this key into your .env file as: 
+
 ```OPENAI_API_KEY="<api-key-here"```
 
 ### NEONDB
-Then, head over to neondb, and create an account.
+Go to neondb, and create an account.
+
 Create a new project with postgresql, and click "Connect".
 
-Paste the connection string in as:
+Then, paste the connections tring into your .env file as 
+
 ```DATABASE_URL="<connection-string>"```
 
 ### STARTING A DEVELOPMENT SERVER
