@@ -59,6 +59,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     
         if(!title) return toast.error("Title is required");
         if(!content) return toast.error("Content is required");
+        if(selectedInterests.length === 0) return toast.error("Interests are required")
 
         try {
             setIsPending(true);
