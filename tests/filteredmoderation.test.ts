@@ -3,8 +3,11 @@
 import containsBannedWords from "@/lib/banned-words";
 
 const cases = [
+    // Contains bad word, plainly
     {input: "shit", expected: true},
+    // Does not contain bad word.
     {input: "Hello!", expected: false},
+    // Contains bad word, but inconsistent caps.
     {input: "SHit", expected: true},
 ];
 
