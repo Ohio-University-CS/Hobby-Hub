@@ -9,7 +9,12 @@ export async function POST(req: NextRequest) {
 
     if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
 
-    let body: {title?: string; content?: string} = {};
+    let body: {
+        title?: string;
+        content?: string;
+        interests?: string[]
+    } = {};
+
     try {
         body = await req.json();
     }
@@ -17,15 +22,23 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({error: "Invalid JSON"}, {status: 400});
     }
 
-    const {title, content} = body;
+    const {title, content, interests = []} = body;
 
-    if(!title || !content) return NextResponse.json({error: "Missing fields"}, {status: 400});
+    if(!title || !content || !interests) return NextResponse.json({error: "Missing fields"}, {status: 400});
     
     const post = await prisma.post.create({
         data: {
             title,
             content,
-            userId: session.user.id
+            userId: session.user.id,
+
+            postInterests: {
+                create: interests.map((interestId) => ({
+                    interest: {
+                        connect: {id: interestId}
+                    }
+                }))
+            }
         },
     });
 

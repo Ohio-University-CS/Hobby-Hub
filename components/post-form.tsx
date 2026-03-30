@@ -23,6 +23,10 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+
+    const [selectedInterests, setSelectedInterests] = useState<any[]>([]);
+    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [query, setQuery] = useState("");
     
     const router = useRouter();
 
@@ -38,6 +42,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
                 setTitle(data.title);
                 setContent(data.content);
+                setSelectedInterests(data.interests);
             }
             catch {
                 toast.error("Failed to load post");
@@ -63,7 +68,12 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                 {
                     method: isEditing ? "PUT" : "POST",
                     headers: { "Content-Type": "application/json"},
-                    body: JSON.stringify({title, content}),
+                    body: JSON.stringify(
+                    {
+                        title,
+                        content,
+                        interests: selectedInterests.map(i => i.id)
+                    }),
                     credentials: "include"
                 }
             );
@@ -97,7 +107,6 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json"},
-                    body: JSON.stringify({title}),
                     credentials: "include"
                 }
             );
@@ -125,7 +134,6 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-white">
 
-
             <div className="w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
                 <Button
@@ -147,7 +155,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                     </Button>
                 )}
             
-                <h1 className="text-2xl font-semibold">
+                <h1 className="text-2xl font-bold">
                     {isEditing ? "Edit Post" : "Create Post"}
                 </h1>
 
@@ -168,10 +176,73 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         />
                     </div>
 
-                    <p className="text-muted-foreground mb-2">Preview:</p>
+
+                    <h1 className="text-2xl font-semibold">
+                        Relevant Interests
+                    </h1>
+
+                    <Input
+                        value={query}
+                        onChange={async (e) => {
+                            const value = e.target.value;
+                            setQuery(value);
+
+                            if(!value) {
+                                setSuggestions([]);
+                                return;
+                            }
+
+                            const res = await fetch(`/api/interests?query=${value}`);
+                            const data = await res.json();
+
+                            setSuggestions(data);
+                        }}
+
+                        placeholder = "Add relevant interests.."
+                    />
+
+                    {suggestions.length > 0 && (
+                        <ul className="absolute z-10 w-auto bg-white border rounded-md mt-1 shadow">
+                            {suggestions.map((interest) => (
+                                <li
+                                    key = {interest.id}
+                                    className = "px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => {
+                                        if(!selectedInterests.find(i => i.id === interest.id)) {
+                                            setSelectedInterests(prev => [...prev, interest]);
+                                        }
+
+                                        setQuery("");
+                                        setSuggestions([]);
+                                    }}
+                                >
+                                    {interest.name}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
+                    <div className = "flex flex-wrap">
+                        {selectedInterests.map((interest) => (
+                            <Button
+                                key = {interest.id}
+                                type = "button"
+                                disabled = {isPending}
+                                className = "w-full h-11 bg-black text-white inline-flex w-auto h-auto"
+                                onClick={() => {
+                                    setSelectedInterests(prev => prev.filter(i => i.id !== interest.id));
+                                }}
+                            >
+                                {interest.name}
+                            </Button>
+                        ))}
+                    </div>
+
+                     <h1 className="text-2xl font-semibold">
+                        Preview
+                    </h1>
                     
                     <div className = "border rounded-md p-4 bg-neutral-50">
-
                         <div className = "prose max-w-none">
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}

@@ -11,10 +11,29 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
     const { id } = await params;
 
     try {
-        const post = await prisma.post.findUnique({where: {id}});
+        const post = await prisma.post.findUnique(
+            {
+                where: {id},
+                include: {
+                    postInterests: {
+                        include: {
+                            interest: true
+                        }
+                    }
+                }
+            }
+        );
+
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
-        return NextResponse.json(post);
+        const interests = post.postInterests.map(i => i.interest);
+
+        return NextResponse.json({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            interests
+        });
     }
     catch (err) {
         return NextResponse.json({error: "Failed to load post"}, {status: 500});
@@ -28,9 +47,11 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
         if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
         
         const { id } = await params;
-        const {title, content} = await req.json();
-    
-        if(!title || !content) return NextResponse.json({error: "Missing title or content"}, {status: 400});
+        const {title, content, interests} = await req.json();
+
+        if(!title) return NextResponse.json({error: "Missing title."}, {status: 400});
+        if(!content) return NextResponse.json({error: "Missing content."}, {status: 400});
+        if(!interests) return NextResponse.json({error: "Missing interests."}, {status: 400});
     
         const post = await prisma.post.findUnique({where: {id: id}});
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 400});
@@ -39,7 +60,19 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
     
         const updatedPost = await prisma.post.update({
             where: {id: id},
-            data: {title, content}
+            data: {
+                title,
+                content,
+                
+                postInterests: {
+                    deleteMany: {},
+                    create: interests.map((interestId: string) => ({
+                        interest: {
+                            connect: {id: interestId}
+                        }
+                    }))
+                }
+            }
         });
     
         return NextResponse.json(updatedPost);
