@@ -29,7 +29,7 @@ Then, paste the connections tring into your .env file as
 
 ```DATABASE_URL="<connection-string>"```
 
-### STARTING A DEVELOPMENT SERVER
+## STARTING A DEVELOPMENT SERVER
 
 Then, run the development server:
 
@@ -38,3 +38,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see results.
+
+## RUNNING TESTS
+
+Make sure API keys are valid, then run ```npx jest```
