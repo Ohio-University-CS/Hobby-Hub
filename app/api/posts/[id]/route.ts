@@ -63,7 +63,7 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
             data: {
                 title,
                 content,
-                
+
                 postInterests: {
                     deleteMany: {},
                     create: interests.map((interestId: string) => ({
@@ -95,7 +95,11 @@ export async function DELETE(req: NextRequest, {params}: RouteContext) {
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 400});
     
         if (post.userId !== session.user.id) return NextResponse.json({error: "Unauthorized"}, {status: 403});
-    
+
+        await prisma.postInterest.deleteMany({
+            where: {postId: id}
+        });
+
         await prisma.post.delete({
             where: {id: id}
         });
