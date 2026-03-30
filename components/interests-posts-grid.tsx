@@ -12,7 +12,7 @@ interface Post {
     content: string;
 }
 
-export const ExplorePostsGrid = () => {
+export const InterestsPostsGrid = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,7 +21,7 @@ export const ExplorePostsGrid = () => {
     useEffect(() => {
         async function fetchPosts() {
             try {
-                const res = await fetch("/api/posts/explore", {
+                const res = await fetch("/api/posts/interests", {
                     credentials: "include",
                 });
 

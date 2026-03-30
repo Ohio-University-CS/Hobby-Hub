@@ -62,11 +62,15 @@ export async function GET(req: NextRequest) {
         if(!session?.user) {
             return NextResponse.json({error: "Not authorized"}, {status: 401});
         }
+
+        const user = await prisma.user.findUnique({
+            where: {id: session.user?.id},
+            include: {userInterests: true}
+        });
     
         const posts = await prisma.post.findMany({
-            where: {userId: session.user.id},
             include: {user: true},
-            orderBy: {createdAt: "desc"},
+            orderBy: {createdAt: "desc"}
         });
 
         return NextResponse.json(posts);

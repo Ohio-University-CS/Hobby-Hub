@@ -57,8 +57,6 @@ export const ManagePostsGrid = () => {
 
     return (
         <div className = "p-8">
-            <h1 className = "text-2xl font-semibold mb-6">Manage Posts</h1>
-
             <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
                 <Card
                     onClick={() => router.push(`/posts/new`)}
