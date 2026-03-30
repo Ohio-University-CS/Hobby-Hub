@@ -14,15 +14,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 
-export const PostForm = ({ postId }: {postId?: string}) => {
-    
-    const isEditing = !!postId;
+export const ProfileForm = ({ postId }: {postId?: string}) => { 
 
     const [isPending, setIsPending] = useState(false);
-    const [loading, setLoading] = useState(isEditing);
+    const [loading, setLoading] = useState(true);
 
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [name, setName] = useState("");
+    const [body, setBody] = useState("");
 
     const [selectedInterests, setSelectedInterests] = useState<any[]>([]);
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -31,49 +29,46 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (!isEditing) return;
-
-        async function fetchPost() {
+        async function fetchProfile() {
             try {
-                const res = await fetch(`/api/posts/${postId}`, {credentials: "include"});
+                const res = await fetch(`/api/user`, {credentials: "include"});
                 if(!res.ok) throw new Error();
 
                 const data = await res.json();
 
-                setTitle(data.title);
-                setContent(data.content);
+                setName(data.name);
+                setBody(data.body);
                 setSelectedInterests(data.interests);
             }
             catch {
-                toast.error("Failed to load post");
+                toast.error("Failed to load profile");
             }
             finally {
                 setLoading(false);
             }
         }
-        fetchPost();
-    }, [postId, isEditing]);
+        fetchProfile();
+    }, []);
 
     async function handleSubmit(evt: React.SubmitEvent<HTMLFormElement>) {
         evt.preventDefault();
     
-        if(title.trim().length == 0) return toast.error("Title is required");
-        if(content.trim().length == 0) return toast.error("Content is required");
+        if(!name.trim()) return toast.error("Name is required");
+
         if(selectedInterests.length === 0) return toast.error("Interests are required")
 
         try {
             setIsPending(true);
 
-            const res = await fetch(
-                isEditing ? `/api/posts/${postId}` : "/api/posts",
+            const res = await fetch("/api/user",
                 {
-                    method: isEditing ? "PUT" : "POST",
+                    method: "PATCH",
                     headers: { "Content-Type": "application/json"},
                     credentials: "include",
                     body: JSON.stringify(
                     {
-                        title,
-                        content,
+                        name,
+                        body,
                         interests: selectedInterests.map(i => i.id)
                     })
                 }
@@ -83,9 +78,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
             if(!res.ok) throw new Error(data.error || "Something Went Horricially Wrong!");
 
-            toast.success(isEditing ? "Post Updated!" : "Post Created!");
-
-            router.push(`/posts/${data.id}`);
+            toast.success("Profile Updated!");
         }
 
         catch (err: any) { toast.error(err.message); }
@@ -95,16 +88,14 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     async function handleDelete() {
     
-        if(!postId) return;
-
-        const confirmed = confirm("Are you sure you want to delete this post?");
+        const confirmed = confirm("Are you sure you want to delete your profile?");
         if(!confirmed) return;
 
         try {
             setIsPending(true);
 
             const res = await fetch(
-                `/api/posts/${postId}`,
+                `/api/user`,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json"},
@@ -114,10 +105,10 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
             const data = await res.json();
 
-            if(!res.ok) throw new Error(data.error || "Failed to delete post.");
+            if(!res.ok) throw new Error(data.error || "Failed to delete profile.");
 
-            toast.success("Post deleted");
-            router.push("/posts/me");
+            toast.success("Profile deleted");
+            router.push("");
         }
         catch (err: any) { toast.error(err.message); }
 
@@ -145,41 +136,39 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                     Back
                 </Button>
 
-                {isEditing && (
-                    <Button
+                <Button
                     variant="outline"
                     onClick={handleDelete}
                     disabled={isPending}
                     className="bg-black text-white"
-                    >
-                        Delete
-                    </Button>
-                )}
+                >
+                    Delete
+                </Button>
             
                 <h1 className="text-2xl font-bold">
-                    {isEditing ? "Edit Post" : "Create Post"}
+                    User Profile
                 </h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <Input
-                        value = {title}
-                        onChange = {e => setTitle(e.target.value)}
-                        placeholder="Title"
+                        value = {name}
+                        onChange = {e => setName(e.target.value)}
+                        placeholder="Name"
                         className="h-11"    
                     />
 
                     <div className = "space-y-2">
                         <textarea
-                            value = {content}
-                            onChange = {e => setContent(e.target.value)}
-                            placeholder = "Write your post in markdown.."
+                            value = {body || ""}
+                            onChange = {e => setBody(e.target.value)}
+                            placeholder = "Write your body in markdown.."
                             className = "w-full min-h-[150px] border rounded-md px-3 py-2"
                         />
                     </div>
 
 
                     <h1 className="text-2xl font-semibold">
-                        Relevant Interests
+                        Your Interests
                     </h1>
 
                     <Input
@@ -249,7 +238,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeSanitize]}
                             >
-                                {content || "Nothing to Preview Yet"}
+                                {body || "Nothing to Preview Yet"}
                             </ReactMarkdown>
                         </div>
                     </div>
@@ -259,10 +248,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         disabled = {isPending}
                         className="w-full h-11 bg-black text-white"
                     >
-                        {isPending ? 
-                            (isEditing ? "Saving.." : "Creating..")
-                            : (isEditing ? "Save Post" : "Create Post")
-                        }
+                        {isPending ? "Saving.." : "Save Changes"}
                     </Button>
                 </form>
             </div>

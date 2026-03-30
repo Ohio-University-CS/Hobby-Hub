@@ -25,7 +25,7 @@ model PostInterest {
   postId     String
   interestId String
 
-  post     Post     @relation(fields: [postId], references: [id])
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   interest Interest @relation(fields: [interestId], references: [id])
 
   @@id([postId, interestId])
@@ -35,7 +35,7 @@ model UserInterest {
   userId     String
   interestId String
 
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   interest Interest @relation(fields: [interestId], references: [id])
 
   @@id([userId, interestId])
@@ -55,6 +55,8 @@ model User {
   comments      Comment[]
   reactions     Reaction[]
 
+  body String?
+
   userInterests UserInterest[]
 
   @@unique([email])
@@ -69,7 +71,7 @@ model Post {
   title     String
   content   String
   userId    String
-  user      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments  Comment[]
   media     Media[]
   reactions Reaction[]
@@ -85,7 +87,7 @@ model Media {
   type   MediaType
   postId String
 
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -94,8 +96,8 @@ model Comment {
   postId String
   userId String
 
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Reaction {
@@ -104,8 +106,8 @@ model Reaction {
   postId String
   userId String
 
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
 }

@@ -96,7 +96,6 @@ export const RegisterForm = () => {
                             Login
                         </Link>
                     </p>
-
                 </form>
             </div>
         </div>

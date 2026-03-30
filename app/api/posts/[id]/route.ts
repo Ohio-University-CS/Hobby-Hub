@@ -12,18 +12,16 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
     const { id } = await params;
 
     try {
-        const post = await prisma.post.findUnique(
-            {
-                where: {id},
-                include: {
-                    postInterests: {
-                        include: {
-                            interest: true
-                        }
+        const post = await prisma.post.findUnique({
+            where: {id},
+            include: {
+                postInterests: {
+                    include: {
+                        interest: true
                     }
                 }
             }
-        );
+        });
 
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
