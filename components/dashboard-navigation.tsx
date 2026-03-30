@@ -6,8 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-    {name: "Interests", url: "/interests"},
-    {name: "Explore", url: "/explore"},
+    {name: "Interests", url: "/posts/interests"},
+    {name: "Explore", url: "/posts/explore"},
     {name: "Manage Posts", url: "/posts/me"},
 ]
 
