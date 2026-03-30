@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { moderateText } from "@/lib/moderation";
 import { prisma } from "@/lib/prisma";
 import { Route } from "next";
 import { NextRequest, NextResponse } from "next/server";
@@ -57,6 +58,15 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 400});
     
         if (post.userId !== session.user.id) return NextResponse.json({error: "Unauthorized"}, {status: 403});
+
+         const moderation = await moderateText(content + " " + title);
+        
+        if(moderation.flagged) {
+            return NextResponse.json(
+                {error: "Content violates Hobby-Hub's Community Guidelines."},
+                {status: 400}
+            );
+        }
     
         const updatedPost = await prisma.post.update({
             where: {id: id},

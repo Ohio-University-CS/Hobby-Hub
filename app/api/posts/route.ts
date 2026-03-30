@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { moderateText } from "@/lib/moderation";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -25,6 +26,15 @@ export async function POST(req: NextRequest) {
     const {title, content, interests = []} = body;
 
     if(!title || !content || !interests) return NextResponse.json({error: "Missing fields"}, {status: 400});
+
+    const moderation = await moderateText(content + " " + title);
+
+    if(moderation.flagged) {
+        return NextResponse.json(
+            {error: "Content violates Hobby-Hub's Community Guidelines."},
+            {status: 400}
+        );
+    }
     
     const post = await prisma.post.create({
         data: {
