@@ -33,7 +33,20 @@ export default function RootLayout({
         <main className="pt-20">
           {children}
         </main>
-        <Toaster position="top-center" richColors />
+        <Toaster 
+          position="top-center"
+          offset={60}
+          richColors 
+          theme="system"
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              toast: "w-full rounded-lg shadow-lg flex items-start gap-3 px-4 py-3 gap-3",
+              title: "font-semibold text-sm",
+              description: "text-sm text-neutral-500 mt-0.5"
+            }
+          }}
+        />
       </body>
     </html>
   );
