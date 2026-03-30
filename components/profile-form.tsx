@@ -14,7 +14,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 
-export const ProfileForm = ({ postId }: {postId?: string}) => { 
+export const ProfileForm = () => { 
 
     const [isPending, setIsPending] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -130,7 +130,7 @@ export const ProfileForm = ({ postId }: {postId?: string}) => {
 
                 <Button
                     variant="outline"
-                    onClick={() => router.push("/posts/me")}
+                    onClick={() => router.push("")}
                     className="bg-black text-white"
                 >
                     Back
