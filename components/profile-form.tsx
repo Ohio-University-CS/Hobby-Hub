@@ -136,15 +136,6 @@ export const ProfileForm = () => {
                     Back
                 </Button>
 
-                <Button
-                    variant="outline"
-                    onClick={handleDelete}
-                    disabled={isPending}
-                    className="bg-black text-white"
-                >
-                    Delete
-                </Button>
-            
                 <h1 className="text-2xl font-bold">
                     User Profile
                 </h1>
@@ -249,6 +240,16 @@ export const ProfileForm = () => {
                         className="w-full h-11 bg-black text-white"
                     >
                         {isPending ? "Saving.." : "Save Changes"}
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        type="button"
+                        onClick={handleDelete}
+                        disabled={isPending}
+                        className="w-full h-11 bg-red-500 text-white"
+                    >
+                        Delete
                     </Button>
                 </form>
             </div>

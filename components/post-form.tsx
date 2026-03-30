@@ -144,17 +144,6 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                 >
                     Back
                 </Button>
-
-                {isEditing && (
-                    <Button
-                    variant="outline"
-                    onClick={handleDelete}
-                    disabled={isPending}
-                    className="bg-black text-white"
-                    >
-                        Delete
-                    </Button>
-                )}
             
                 <h1 className="text-2xl font-bold">
                     {isEditing ? "Edit Post" : "Create Post"}
@@ -264,6 +253,20 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                             : (isEditing ? "Save Post" : "Create Post")
                         }
                     </Button>
+
+                    {isEditing && (
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={handleDelete}
+                            disabled={isPending}
+                            className="w-full h-11 bg-red-500 text-white"
+                        >
+                            Delete
+                        </Button>
+                        )
+                    }
+                    
                 </form>
             </div>
         </div>
