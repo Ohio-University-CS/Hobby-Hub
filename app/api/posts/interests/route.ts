@@ -32,7 +32,8 @@ export async function GET(req: NextRequest) {
                     include: {
                         interest: true
                     }
-                }
+                },
+                user: true
             },
             orderBy: {createdAt: "desc"}
         });

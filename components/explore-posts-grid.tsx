@@ -6,14 +6,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation"
 import {Card, CardContent} from "./ui/card";
 
-interface Post {
-    id: string;
-    title: string;
-    content: string;
-}
-
 export const ExplorePostsGrid = () => {
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
@@ -61,15 +55,24 @@ export const ExplorePostsGrid = () => {
      return (
         <div className = "p-8">
             <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
-                {posts.map(post=> (
+                {posts.map(post => (
                     <Card
                         key = {post.id}
                         onClick = {() => router.push(`/posts/${post.id}`)}
-                        className = "cursor-pointer bg-white border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
+                        className = "cursor-pointer bg-white border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col overflow-hidden aspect-[4/3]"
                     >
-                        <CardContent>
+                        <CardContent className="flex-1 flex items-center justify-center text-center text-lg font-medium truncate">
                             {post.title}
                         </CardContent>
+
+                        <div className="border-t border-neutral-100 px-4 py-3 text-left">
+                            <div className="text-sm font-semibold text-neutral-800 truncate">
+                                {post.title}
+                            </div>
+                            <div className="text-xs text-neutral-500 truncate">
+                                {post.user?.name}
+                            </div>
+                        </div>
                     </Card>
                 ))}
             </div>
