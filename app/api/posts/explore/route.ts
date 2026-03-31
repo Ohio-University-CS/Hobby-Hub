@@ -9,11 +9,30 @@ export async function GET(req: NextRequest) {
         // User doesn't need to be valid here. Let users explore without creating an account.
     
         const posts = await prisma.post.findMany({
-            include: {user: true},
+            include: {
+                user: true,
+                postInterests: {
+                    include: {
+                        interest: true
+                    }
+                }
+            },
             orderBy: {createdAt: "desc"}
         });
 
-        return NextResponse.json(posts);
+        const response: PostWithRelations[] = posts.map(post => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            createdAt: post.createdAt,
+            user: post.user,
+            interests: post.postInterests.map(pi => ({
+                id: pi.interest.id,
+                name: pi.interest.name
+            }))
+        }));
+
+        return NextResponse.json(response);
     }
     catch (err) {
         console.error(err);

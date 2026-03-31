@@ -21,10 +21,12 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     const [isPending, setIsPending] = useState(false);
     const [loading, setLoading] = useState(isEditing);
 
+    const [post, setPost] = useState<PostWithRelations | undefined>(undefined);
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-
     const [selectedInterests, setSelectedInterests] = useState<any[]>([]);
+
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [query, setQuery] = useState("");
     
@@ -39,6 +41,8 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                 if(!res.ok) throw new Error();
 
                 const data = await res.json();
+
+                setPost(data);
 
                 setTitle(data.title);
                 setContent(data.content);
@@ -56,6 +60,8 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     async function handleSubmit(evt: React.SubmitEvent<HTMLFormElement>) {
         evt.preventDefault();
+
+        if(!post) return;
     
         if(title.trim().length == 0) return toast.error("Title is required");
         if(content.trim().length == 0) return toast.error("Content is required");
@@ -81,7 +87,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
             const data = await res.json();
 
-            if(!res.ok) throw new Error(data.error || "Something Went Horricially Wrong!");
+            if(!res.ok) throw new Error(data.error || "Something Went Horrifically Wrong!");
 
             toast.success(isEditing ? "Post Updated!" : "Post Created!");
 
@@ -221,7 +227,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                                 disabled = {isPending}
                                 className = "w-full h-11 bg-black text-white inline-flex w-auto h-auto"
                                 onClick={() => {
-                                    setSelectedInterests(prev => prev.filter(i => i.id !== interest.id));
+                                    setSelectedInterests(prev => prev.filter(i => i.id !== interest.interest.id));
                                 }}
                             >
                                 {interest.name}

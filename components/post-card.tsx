@@ -1,10 +1,9 @@
 'use client'
 
 import { Card, CardContent } from "./ui/card";
-import { useRouter } from "next/navigation";
 import { getDayFromCreatedAt } from "@/lib/date-to-day";
 
-export function PostCard({post, router, href}: {post: any; router: any; href: any}) {
+export function PostCard({post, router, href}: {post: PostWithRelations; router: any; href: any}) {
 
     return (
         <Card
@@ -17,7 +16,6 @@ export function PostCard({post, router, href}: {post: any; router: any; href: an
             </CardContent>
     
             <div className="border-t border-neutral-100 px-4 py-3 text-left">
-    
                 <div className="text-sm font-semibold text-neutral-800 truncate">
                     {post.title}
                 </div>

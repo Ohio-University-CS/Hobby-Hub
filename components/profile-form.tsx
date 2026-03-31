@@ -209,10 +209,6 @@ export const ProfileForm = () => {
                                     }}
                                 >
                                     <span>{interest.name}{" "}</span>
-
-                                    <span className="text-gray-500">
-                                        {interest._count?.posts ?? 0} posts 
-                                    </span>
                                 </li>
                             ))}
                         </ul>
@@ -230,9 +226,6 @@ export const ProfileForm = () => {
                                 }}
                             >
                                 {interest.name}
-                                <span className="text-white ml-2">
-                                    {interest._count?.posts ?? 0}
-                                </span>
                             </Button>
                         ))}
                     </div>

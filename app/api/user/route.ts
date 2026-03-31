@@ -11,34 +11,32 @@ export async function GET(req: NextRequest) {
         const userId = session.user.id;
 
         const user = await prisma.user.findUnique({
-            where: {id: userId},
-        });
-
-        if(!user) return NextResponse.json({erro: "User not found"}, {status: 400});
-
-        const interests = await prisma.interest.findMany({
             where: {
-                users: {
-                    some: {
-                        userId: userId
-                    }
-                }
+                id: userId
             },
             include: {
-                _count: {
-                    select: {
-                        posts: true
+                userInterests: {
+                    include: {
+                        interest: true
                     }
                 }
             }
         });
 
-        return NextResponse.json({
+        if(!user) return NextResponse.json({erro: "User not found"}, {status: 400});
+
+        const response: UserWithRelations = {
             id: user.id,
             name: user.name,
             body: user.body,
-            interests
-        });
+            createdAt: user.createdAt,
+            interests: user.userInterests.map(pi => ({
+                id: pi.interest.id,
+                name: pi.interest.name
+            }))
+        };
+
+        return NextResponse.json(response);
     }
     catch(err) {
         return NextResponse.json({error: "Failed to fetch user."}, {status: 500});

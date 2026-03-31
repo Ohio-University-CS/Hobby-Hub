@@ -26,16 +26,19 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
 
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
-        const interests = post.postInterests.map(i => i.interest);
-
-        return NextResponse.json({
+        const response: PostWithRelations = {
             id: post.id,
             title: post.title,
             content: post.content,
             createdAt: post.createdAt,
             user: post.user,
-            interests
-        });
+            interests: post.postInterests.map(pi => ({
+                id: pi.interest.id,
+                name: pi.interest.name
+            }))
+        };
+
+        return NextResponse.json(response);
     }
     catch (err) {
         return NextResponse.json({error: "Failed to load post"}, {status: 500});
@@ -70,10 +73,20 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
         }
     
         const updatedPost = await prisma.post.update({
-            where: {id: id},
+            include: {
+                user: true,
+                postInterests: {
+                    include: {
+                        interest: true
+                    }
+                }
+            },
+            where: {
+                id: id
+            },
             data: {
-                title,
-                content,
+                title: title,
+                content: content,
 
                 postInterests: {
                     deleteMany: {},
@@ -85,8 +98,20 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
                 }
             }
         });
+
+        const response: PostWithRelations = {
+            id: updatedPost.id,
+            title: updatedPost.title,
+            content: updatedPost.content,
+            createdAt: updatedPost.createdAt,
+            user: updatedPost.user,
+            interests: updatedPost.postInterests.map(pi => ({
+                id: pi.interest.id,
+                name: pi.interest.name
+            }))
+        };
     
-        return NextResponse.json(updatedPost);
+        return NextResponse.json(response);
     }
 
     catch (err) {
