@@ -151,7 +151,7 @@ export const ProfileForm = () => {
                     User Profile
                 </h1>
 
-                <form onSubmit={handleSave} className="space-y-4">
+                <form onSubmit={handleSave} className="space-y-2">
                     <Input
                         value = {name}
                         onChange = {e => setName(e.target.value)}
@@ -194,7 +194,7 @@ export const ProfileForm = () => {
                     />
 
                     {suggestions.length > 0 && (
-                        <ul className="absolute z-10 w-auto bg-white border rounded-md mt-1 shadow">
+                        <ul className="absolute z-10 w-auto bg-white border rounded-md mt-1 shadow-lg">
                             {suggestions.map((interest) => (
                                 <li
                                     key = {interest.id}
@@ -208,13 +208,17 @@ export const ProfileForm = () => {
                                         setSuggestions([]);
                                     }}
                                 >
-                                    {interest.name}
+                                    <span>{interest.name}{" "}</span>
+
+                                    <span className="text-gray-500">
+                                        {interest._count?.posts ?? 0} posts 
+                                    </span>
                                 </li>
                             ))}
                         </ul>
                     )}
 
-                    <div className = "flex flex-wrap">
+                    <div className = "flex flex-wrap gap-2">
                         {selectedInterests.map((interest) => (
                             <Button
                                 key = {interest.id}
@@ -226,6 +230,9 @@ export const ProfileForm = () => {
                                 }}
                             >
                                 {interest.name}
+                                <span className="text-white ml-2">
+                                    {interest._count?.posts ?? 0}
+                                </span>
                             </Button>
                         ))}
                     </div>

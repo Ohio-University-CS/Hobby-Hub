@@ -12,19 +12,28 @@ export async function GET(req: NextRequest) {
 
         const user = await prisma.user.findUnique({
             where: {id: userId},
+        });
+
+        if(!user) return NextResponse.json({erro: "User not found"}, {status: 400});
+
+        const interests = await prisma.interest.findMany({
+            where: {
+                users: {
+                    some: {
+                        userId: userId
+                    }
+                }
+            },
             include: {
-                userInterests: {
-                    include: {
-                        interest: true
+                _count: {
+                    select: {
+                        posts: true
                     }
                 }
             }
         });
 
-        if(!user) return NextResponse.json({error: "User not found"}, {status: 404});
         
-        const interests = user.userInterests.map(i => i.interest);
-
         return NextResponse.json({
             id: user.id,
             name: user.name,

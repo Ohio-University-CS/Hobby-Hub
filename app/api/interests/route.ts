@@ -6,10 +6,17 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("query") || "";
 
     const interests = await prisma.interest.findMany({
-        where: {
+        where: query ? {
             name: {
                 contains: query,
                 mode: "insensitive"
+            }
+        } : undefined,
+        include: {
+            _count: {
+                select: {
+                    posts: true
+                }
             }
         },
         take: 10
