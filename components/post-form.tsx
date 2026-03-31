@@ -149,7 +149,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                     {isEditing ? "Edit Post" : "Create Post"}
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-2">
                     <Input
                         value = {title}
                         onChange = {e => setTitle(e.target.value)}
