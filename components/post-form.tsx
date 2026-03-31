@@ -213,7 +213,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         </ul>
                     )}
 
-                    <div className = "flex flex-wrap">
+                    <div className = "flex flex-wrap gap-2">
                         {selectedInterests.map((interest) => (
                             <Button
                                 key = {interest.id}
