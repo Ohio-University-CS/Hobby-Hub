@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
+import { sanitizeSchema } from "@/lib/sanitize-schema";
+
 import { useRouter } from "next/navigation";
 import { getDayFromCreatedAt } from "@/lib/date-to-day"
 
@@ -104,7 +106,7 @@ export const ViewPostPage = () => {
                 <div className = "prose max-w-none">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
-                        rehypePlugins={[rehypeSanitize]}
+                        rehypePlugins={[[rehypeSanitize, sanitizeSchema] as const]}
                     >
                         {post.content || "Nothing to Preview Yet"}
                     </ReactMarkdown>
