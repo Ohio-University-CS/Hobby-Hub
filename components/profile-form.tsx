@@ -136,18 +136,18 @@ export const ProfileForm = () => {
 
     if(loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <p className="text-muted-foreground text-2xl font-semibold">Loading..</p>
+            <div className = "flex items-center justify-center h-screen">
+                <p className = "text-muted-foreground text-2xl font-semibold">Loading..</p>
             </div>
         );
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className = "flex items-center justify-center min-h-screen bg-white">
 
-            <div className="w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
+            <div className = "w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-                <h1 className="text-2xl font-bold">
+                <h1 className = "text-2xl font-bold">
                     User Profile
                 </h1>
 
@@ -156,7 +156,7 @@ export const ProfileForm = () => {
                         value = {name}
                         onChange = {e => setName(e.target.value)}
                         placeholder="Name"
-                        className="h-11"    
+                        className="h-11 w-full border rounded-md px-3 py-2"    
                     />
 
                     <div className = "space-y-2">
@@ -164,7 +164,7 @@ export const ProfileForm = () => {
                             value = {body || ""}
                             onChange = {e => setBody(e.target.value)}
                             placeholder = "Write your body in markdown.."
-                            className = "w-full min-h-[150px] border rounded-md px-3 py-2"
+                            className = "h-11 w-full min-h-[150px] border rounded-md px-3 py-2"
                         />
                     </div>
 
@@ -174,8 +174,8 @@ export const ProfileForm = () => {
                     </h1>
 
                     <Input
-                        value={query}
-                        onChange={async (e) => {
+                        value = {query}
+                        onChange = {async (e) => {
                             const value = e.target.value;
                             setQuery(value);
 
