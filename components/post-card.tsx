@@ -4,12 +4,12 @@ import { Card, CardContent } from "./ui/card";
 import { useRouter } from "next/navigation";
 import { getDayFromCreatedAt } from "@/lib/date-to-day";
 
-export function PostCard({post, router}: {post: any; router: any;}) {
+export function PostCard({post, router, href}: {post: any; router: any; href: any}) {
 
     return (
         <Card
             key = {post.id}
-            onClick = {() => router.push(`/posts/${post.id}`)}
+            onClick = {() => router.push(href)}
             className = "bg-white cursor-pointer border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col overflow-hidden aspect-[4/3]"
         >
             <CardContent className="flex-1 flex items-center justify-center text-center text-lg font-medium truncate">

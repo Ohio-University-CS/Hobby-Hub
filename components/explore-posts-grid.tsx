@@ -64,6 +64,7 @@ export const ExplorePostsGrid = () => {
                         key={post.id}
                         post={post}
                         router={router}
+                        href={`/posts/${post.id}`}
                     />
                 ))}
             </div>

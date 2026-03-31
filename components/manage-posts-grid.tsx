@@ -65,6 +65,7 @@ export const ManagePostsGrid = () => {
                         key={post.id}
                         post={post}
                         router={router}
+                        href={`/posts/edit/${post.id}`}
                     />
                 ))}
             </div>
