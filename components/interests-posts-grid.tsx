@@ -1,10 +1,11 @@
 'use client';
 
-import React from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation"
-import {Card, CardContent} from "./ui/card";
+import { useRouter } from "next/navigation";
+import { getDayFromCreatedAt } from "@/lib/date-to-day";
+
+import { Card, CardContent } from "./ui/card";
 
 export const InterestsPostsGrid = () => {
     const [posts, setPosts] = useState<any[]>([]);
@@ -73,7 +74,7 @@ export const InterestsPostsGrid = () => {
                                 {post.user?.name}
                             </div>
                             <div className="text-xs text-neutral-500 truncate">
-                                {post.createdAt}
+                                {getDayFromCreatedAt(post.createdAt)}
                             </div>
                         </div>
                     </Card>

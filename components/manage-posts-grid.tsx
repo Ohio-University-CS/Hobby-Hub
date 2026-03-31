@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getDayFromCreatedAt } from "@/lib/date-to-day";
 
 import { Card, CardContent } from "./ui/card";
 
@@ -80,7 +81,7 @@ export const ManagePostsGrid = () => {
                             </div>
 
                             <div className="text-xs text-neutral-500 truncate">
-                                {post.createdAt}
+                                {getDayFromCreatedAt(post.createdAt)}
                             </div>
                         </div>
                     </Card>

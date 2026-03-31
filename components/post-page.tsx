@@ -8,8 +8,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import { useRouter } from "next/navigation";
+import { getDayFromCreatedAt } from "@/lib/date-to-day"
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const ViewPostPage = () => {
@@ -19,20 +19,19 @@ export const ViewPostPage = () => {
     const [post, setPost] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [interests, setInterests] = useState<any[]>([]);
-
     const router = useRouter();
-
+    
     useEffect(() => {
         if(!postId) return;
-
+        
         async function fetchPost() {
             try {
                 const res = await fetch(`/api/posts/${postId}`, {credentials: "include",});
-
+                
                 if(!res.ok) throw new Error("Failed to fetch post");
-
+                
                 const data = await res.json();
-
+                
                 setPost(data);
                 setInterests(data.interests);
             }
@@ -44,7 +43,7 @@ export const ViewPostPage = () => {
                 setLoading(false);
             }
         }
-
+        
         if(postId) fetchPost();
     }, [postId]);
 
@@ -86,7 +85,7 @@ export const ViewPostPage = () => {
             </h1>
 
             <h1 className="text-xl text-neutral-700 font-bold mb-6">
-                {post.createdAt}
+                {getDayFromCreatedAt(post.createdAt)}
             </h1>
 
             <div className = "flex flex-wrap gap-2">
