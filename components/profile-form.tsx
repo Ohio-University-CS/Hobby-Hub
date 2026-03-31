@@ -147,14 +147,6 @@ export const ProfileForm = () => {
 
             <div className="w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
-                <Button
-                    variant="outline"
-                    onClick={() => router.push("")}
-                    className="bg-black text-white"
-                >
-                    Back
-                </Button>
-
                 <h1 className="text-2xl font-bold">
                     User Profile
                 </h1>
