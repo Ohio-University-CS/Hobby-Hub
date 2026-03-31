@@ -1,13 +1,20 @@
 ## This is the Hobby Hub Development Repository for CS 3560 at Ohio University
 
-Hobby Hub is a welcoming online space for hobbyists. Content is promoted on popularity and user interests, driven via tags.
+### Hobby Hub is a welcoming online space for hobbyists. Content is promoted on popularity and user interests.
 
-# Contributors:
+On page open, you will be sent to a landing page with the option to login or explore.
+Exploring, let's you search for interests and content you want, without an account.
 
-- Collin Blumenauer
-- James Sparks
+If you create an account, you can save your interests and choose them from your profile.
+Then, there will be an "interests" tab at the top of the screen, which will show relevant posts from your profile's interests.
 
-## Getting Started
+If you have an account, you can also manage posts and create new ones!
+Post body can be created with markdown, and you assign relevant interests based on the content you wish to publish.
+
+All posts content and title must not contain discriminatory content. 
+Moderation is done through OpenAI.
+
+## Development: Getting Started
 ### PROJECT SETUP / UPDATING
 Run ```npm start``` in the repository root to install/update any dependencies.
 
