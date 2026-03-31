@@ -47,7 +47,7 @@ export default function DashboardNavigation() {
         <div className = "fixed top-0 left-0 w-full bg-black shadow-lg z-50">
             <div className = "flex justify-center items-center gap-10 py-4">
 
-                <div className="w-1/3 flex justify-start px-16"/>
+                <div className="w-1/3 flex justify-start px-8"/>
 
                 <div className="flex justify-center items-center gap-10 w-1/3">
                     {filteredNavItems.map((item) => {
@@ -69,7 +69,7 @@ export default function DashboardNavigation() {
                     })}
                 </div>
 
-                <div className="w-1/3 flex justify-end px-16">
+                <div className="w-1/3 flex justify-end px-8">
                     {loading ? null : user ? (
                         <Link
                             href="/profile"
