@@ -117,7 +117,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
             if(!res.ok) throw new Error(data.error || "Failed to delete post.");
 
             toast.success("Post deleted");
-            router.push("/posts/me");
+            router.back();
         }
         catch (err: any) { toast.error(err.message); }
 
@@ -139,7 +139,8 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
                 <Button
                     variant="outline"
-                    onClick={() => router.push("/posts/me")}
+                    type="button"
+                    onClick={() => router.back()}
                     className="bg-black text-white"
                 >
                     Back

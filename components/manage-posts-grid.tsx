@@ -2,23 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
-
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { error } from "console";
 
 import { Card, CardContent } from "./ui/card";
 
-interface Post {
-    id: string;
-    title: string;
-}
-
 export const ManagePostsGrid = () => {
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<any>([]);
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
@@ -50,7 +40,9 @@ export const ManagePostsGrid = () => {
     if(loading) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground text-2xl font-semibold">Loading posts..</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">
+                    Loading posts..
+                </p>
             </div>
         );
     }
@@ -67,15 +59,30 @@ export const ManagePostsGrid = () => {
                     </CardContent>
                 </Card>
 
-                {posts.map(post=> (
+                {posts.map(post => (
                     <Card
                         key = {post.id}
                         onClick = {() => router.push(`/posts/edit/${post.id}`)}
-                        className = "cursor-pointer bg-white border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
+                        className = "bg-white cursor-pointer border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col overflow-hidden aspect-[4/3]"
                     >
-                        <CardContent>
+                        <CardContent className="flex-1 flex items-center justify-center text-center text-lg font-medium truncate">
                             {post.title}
                         </CardContent>
+
+                        <div className="border-t border-neutral-100 px-4 py-3 text-left">
+
+                            <div className="text-sm font-semibold text-neutral-800 truncate">
+                                {post.title}
+                            </div>
+                            
+                            <div className="text-xs text-neutral-500 truncate">
+                                {post.user?.name}
+                            </div>
+
+                            <div className="text-xs text-neutral-500 truncate">
+                                {post.createdAt}
+                            </div>
+                        </div>
                     </Card>
                 ))}
             </div>

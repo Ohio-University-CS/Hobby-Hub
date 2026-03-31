@@ -72,6 +72,9 @@ export const InterestsPostsGrid = () => {
                             <div className="text-xs text-neutral-500 truncate">
                                 {post.user?.name}
                             </div>
+                            <div className="text-xs text-neutral-500 truncate">
+                                {post.createdAt}
+                            </div>
                         </div>
                     </Card>
                 ))}

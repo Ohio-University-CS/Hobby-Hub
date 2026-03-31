@@ -19,10 +19,12 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
                     include: {
                         interest: true
                     }
-                }
+                },
+                user: true
             }
         });
 
+        
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
         const interests = post.postInterests.map(i => i.interest);
@@ -31,6 +33,8 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
             id: post.id,
             title: post.title,
             content: post.content,
+            createdAt: post.createdAt,
+            user: post.user,
             interests
         });
     }

@@ -39,7 +39,9 @@ export const ExplorePostsGrid = () => {
     if(loading) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground text-2xl font-semibold">Loading posts..</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">
+                    Loading posts..
+                </p>
             </div>
         )
     }
@@ -47,7 +49,9 @@ export const ExplorePostsGrid = () => {
     if(posts.length === 0) {
         return (
             <div className = "flex items-center justify-center h-screen">
-                <p className = "text-muted-foreground text-2xl font-semibold">No posts found</p>
+                <p className = "text-muted-foreground text-2xl font-semibold">
+                    No posts found
+                </p>
             </div>
         );
     }
@@ -59,18 +63,24 @@ export const ExplorePostsGrid = () => {
                     <Card
                         key = {post.id}
                         onClick = {() => router.push(`/posts/${post.id}`)}
-                        className = "cursor-pointer bg-white border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col overflow-hidden aspect-[4/3]"
+                        className = "bg-white cursor-pointer border border-neutral-200 rounded-lg shadow hover:shadow-2xl transition flex flex-col overflow-hidden aspect-[4/3]"
                     >
                         <CardContent className="flex-1 flex items-center justify-center text-center text-lg font-medium truncate">
                             {post.title}
                         </CardContent>
 
                         <div className="border-t border-neutral-100 px-4 py-3 text-left">
+
                             <div className="text-sm font-semibold text-neutral-800 truncate">
                                 {post.title}
                             </div>
+                            
                             <div className="text-xs text-neutral-500 truncate">
                                 {post.user?.name}
+                            </div>
+
+                            <div className="text-xs text-neutral-500 truncate">
+                                {post.createdAt}
                             </div>
                         </div>
                     </Card>
