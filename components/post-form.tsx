@@ -246,7 +246,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                     <Button
                         type = "submit"
                         disabled = {isPending}
-                        className="w-full h-11 bg-black text-white"
+                        className="w-full h-11 bg-green-500 text-white"
                     >
                         {isPending ? 
                             (isEditing ? "Saving.." : "Creating..")
