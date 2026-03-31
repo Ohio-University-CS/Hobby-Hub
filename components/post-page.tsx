@@ -18,6 +18,7 @@ export const ViewPostPage = () => {
 
     const [post, setPost] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
+    const [interests, setInterests] = useState<any[]>([]);
 
     const router = useRouter();
 
@@ -33,6 +34,7 @@ export const ViewPostPage = () => {
                 const data = await res.json();
 
                 setPost(data);
+                setInterests(data.interests);
             }
             catch (err: any) {
                 console.error(err);
@@ -79,13 +81,25 @@ export const ViewPostPage = () => {
                 {post.title}
             </h1>
 
-            <h1 className="text-xl text-neutral-500 font-bold mb-2">
+            <h1 className="text-xl text-neutral-700 font-bold mb-2">
                 {post.user?.name}
             </h1>
 
-            <h1 className="text-xl text-neutral-500 font-bold mb-6">
+            <h1 className="text-xl text-neutral-700 font-bold mb-6">
                 {post.createdAt}
             </h1>
+
+            <div className = "flex flex-wrap gap-2">
+                {interests.map((interest) => (
+                    <Button
+                        key = {interest.id}
+                        type = "button"
+                        className = "w-full h-11 bg-black text-white inline-flex w-auto h-auto"
+                    >
+                        {interest.name}
+                    </Button>
+                ))}
+            </div>
 
             <div className = "rounded-md p-4 bg-neutral-50">
                 <div className = "prose max-w-none">

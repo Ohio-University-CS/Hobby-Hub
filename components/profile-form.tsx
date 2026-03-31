@@ -127,7 +127,7 @@ export const ProfileForm = () => {
             if(!res.ok) throw new Error(data.error || "Failed to delete profile.");
 
             toast.success("Profile deleted");
-            router.push("");
+            router.push("/");
         }
         catch (err: any) { toast.error(err.message); }
 
