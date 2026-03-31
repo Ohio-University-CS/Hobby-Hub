@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent } from "./ui/card";
 
 export const ManagePostsGrid = () => {
-    const [posts, setPosts] = useState<any>([]);
+    const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();

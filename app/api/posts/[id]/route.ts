@@ -24,7 +24,6 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
             }
         });
 
-        
         if(!post) return NextResponse.json({error: "Post not found"}, {status: 404});
 
         const interests = post.postInterests.map(i => i.interest);
