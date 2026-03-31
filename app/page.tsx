@@ -8,37 +8,36 @@ import { toast } from "sonner";
 
 export default function Page() {
 
-  const [user, setUser] = useState<{name: string} | null>(null);
-  const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<{name: string} | null>(null);
+    const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
+    const router = useRouter();
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await fetch("/api/user", {credentials: "include"});
-        if(res.ok) {
-          const data = await res.json();
-          setUser(data);
+    useEffect(() => {
+        async function fetchUser() {
+            try {
+                const res = await fetch("/api/user", {credentials: "include"});
+                if(res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                }
+            }
+            finally {
+                setLoading(false);
+            }
         }
-      }
-      finally {
-        setLoading(false);
-      }
-    }
+        fetchUser();
+    }, []);
 
-    fetchUser();
-  }, []);
+    // If user logged in and not loading, then send to posts/explore
+    useEffect(() => {
+        if(!loading && user) {
+            router.replace("/posts/explore");
+        }
+    }, [user, loading, router])
 
-  // If user logged in and not loading, then send to posts/explore
-  useEffect(() => {
-    if(!loading && user) {
-      router.replace("/posts/explore");
-    }
-  }, [user, loading, router])
+    // If user not logged in, render landing page.
+    if(!user) return (<LandingPage/>);
 
-  // If user not logged in, render landing page.
-  if(!user) return (<LandingPage/>);
-
-  return null;
+    return null;
 }
