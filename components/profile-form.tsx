@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { signOut } from "@/lib/auth-client"
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -50,7 +51,25 @@ export const ProfileForm = () => {
         fetchProfile();
     }, []);
 
-    async function handleSubmit(evt: React.SubmitEvent<HTMLFormElement>) {
+    async function handleSignout() {
+        setIsPending(true);
+
+        await signOut({
+            fetchOptions: {
+                onError: (ctx) => {
+                    setIsPending(false);
+                    toast.error(ctx.error.message);
+                },
+                onSuccess: () => {
+                    setIsPending(false);
+                    router.refresh();
+                    router.replace("/");
+                }
+            }
+        })
+    }
+
+    async function handleSave(evt: React.SubmitEvent<HTMLFormElement>) {
         evt.preventDefault();
     
         if(!name.trim()) return toast.error("Name is required");
@@ -140,7 +159,7 @@ export const ProfileForm = () => {
                     User Profile
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSave} className="space-y-4">
                     <Input
                         value = {name}
                         onChange = {e => setName(e.target.value)}
@@ -237,9 +256,19 @@ export const ProfileForm = () => {
                     <Button
                         type = "submit"
                         disabled = {isPending}
-                        className="w-full h-11 bg-black text-white"
+                        className="w-full h-11 bg-green-500 text-white"
                     >
                         {isPending ? "Saving.." : "Save Changes"}
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        type="button"
+                        onClick={handleSignout}
+                        disabled={isPending}
+                        className="w-full h-11 bg-black text-white"
+                    >
+                        Sign Out
                     </Button>
 
                     <Button

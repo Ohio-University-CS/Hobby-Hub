@@ -94,7 +94,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
     }
 
     async function handleDelete() {
-    
+        
         if(!postId) return;
 
         const confirmed = confirm("Are you sure you want to delete this post?");
@@ -266,7 +266,6 @@ export const PostForm = ({ postId }: {postId?: string}) => {
                         </Button>
                         )
                     }
-                    
                 </form>
             </div>
         </div>

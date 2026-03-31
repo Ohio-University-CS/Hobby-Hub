@@ -5,15 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const session = await auth.api.getSession({headers: req.headers});
-    
-        if(!session?.user) {
-            return NextResponse.json({error: "Not authorized"}, {status: 401});
-        }
 
-        const user = await prisma.user.findUnique({
-            where: {id: session.user?.id},
-            include: {userInterests: true}
-        });
+        // User doesn't need to be valid here. Let users explore without creating an account.
     
         const posts = await prisma.post.findMany({
             include: {user: true},

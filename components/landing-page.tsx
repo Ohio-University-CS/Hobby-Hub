@@ -24,14 +24,13 @@ export const LandingPage = () => {
                     Create posts to showcase your projects and connect with an ever-growing community of makers.
                 </p>
 
-                <div className = "flex flex-row items-center justify-center gap-4 pt-4">
-                    <Link href="/login">
+                <div className = "flex flex-row items-center justify-center gap-2">
+                    <Link href="/posts/explore">
                         <Button variant = "outline" className = "px-6 py-2 bg-black text-white hover:bg-black/90">
-                            Login
+                            Explore
                         </Button>
                     </Link>
-
-                    <Link href="/register">
+                    <Link href="/login">
                         <Button variant = "outline" className = "px-6 py-2 bg-black text-white hover:bg-black/90">
                             Get Started
                         </Button>
