@@ -143,7 +143,7 @@ export const ProfileForm = () => {
     }
 
     return (
-        <div className = "flex items-center justify-center min-h-screen bg-white">
+        <div className = "flex items-center justify-center">
 
             <div className = "w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 

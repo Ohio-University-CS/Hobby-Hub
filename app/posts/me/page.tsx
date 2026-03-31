@@ -2,7 +2,7 @@ import { ManagePostsGrid } from "@/components/manage-posts-grid";
 
 const ManagePostsPage = () => {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen">
             <ManagePostsGrid/>
         </div>
     );
