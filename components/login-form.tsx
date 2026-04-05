@@ -47,7 +47,7 @@ export const LoginForm = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="flex items-center justify-center bg-white">
             <div className="w-full max-w-sm p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
 
                 <div className="logo items-center justify-center w-full">
@@ -89,23 +89,4 @@ export const LoginForm = () => {
             </div>
         </div>
     )
-
-    // return (
-    //     <form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4">
-
-    //         <div className="space-y-2">
-    //             <Label htmlFor="email">Email</Label>
-    //             <Input type="email" id="email" name="email" />
-    //         </div>
-
-    //         <div className="space-y-2">
-    //             <Label htmlFor="password">Password</Label>
-    //             <Input type="password" id="password" name="password" />
-    //         </div>
-
-    //         <Button type="submit" className="w-full bg-black text-white">
-    //             Login
-    //         </Button>
-    //     </form>
-    // );
 }

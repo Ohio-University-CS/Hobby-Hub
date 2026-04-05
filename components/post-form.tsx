@@ -60,8 +60,6 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     async function handleSubmit(evt: React.SubmitEvent<HTMLFormElement>) {
         evt.preventDefault();
-
-        if(!post) return;
     
         if(title.trim().length == 0) return toast.error("Title is required");
         if(content.trim().length == 0) return toast.error("Content is required");
@@ -132,7 +130,7 @@ export const PostForm = ({ postId }: {postId?: string}) => {
 
     if(loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
+            <div className="flex items-center justify-center">
                 <p className="text-muted-foreground text-2xl font-semibold">Loading..</p>
             </div>
         );

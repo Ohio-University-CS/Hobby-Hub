@@ -38,7 +38,7 @@ export const ExplorePostsGrid = () => {
 
     if(loading) {
         return (
-            <div className = "flex items-center justify-center h-screen">
+            <div className = "flex items-center justify-center ">
                 <p className = "text-muted-foreground text-2xl font-semibold">
                     Loading posts..
                 </p>
@@ -48,7 +48,7 @@ export const ExplorePostsGrid = () => {
 
     if(posts.length === 0) {
         return (
-            <div className = "flex items-center justify-center h-screen">
+            <div className = "flex items-center justify-center ">
                 <p className = "text-muted-foreground text-2xl font-semibold">
                     No posts found
                 </p>

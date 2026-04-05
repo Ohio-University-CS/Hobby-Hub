@@ -51,7 +51,7 @@ export const ViewPostPage = () => {
 
     if(loading) {
         return (
-            <div className = "flex items-center justify-center h-screen">
+            <div className = "flex items-center justify-center ">
                 <p className = "text-muted-foreground text-2xl font-semibold">Loading..</p>
             </div>
         );
@@ -59,7 +59,7 @@ export const ViewPostPage = () => {
 
     if(!post) {
         return (
-            <div className = "flex items-center justify-center h-screen">
+            <div className = "flex items-center justify-center">
                 <p className = "text-muted-foreground text-2xl font-semibold">Post not found.</p>
             </div>
         );
