@@ -66,7 +66,7 @@ export const ViewPostPage = () => {
     }
 
     return (
-        <div className="max-w-3xl mx-auto p-8 space-y-6 bg-white rounded-2xl shadow shadow-2xl mt-8">
+        <div className="max-w-3xl mx-auto p-8 space-y-6 bg-white rounded-2xl shadow shadow-2xl mt-4">
 
             <Button
                 variant="outline"

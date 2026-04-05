@@ -47,7 +47,7 @@ export default function DashboardNavigation() {
         <div className = "fixed top-0 left-0 w-full bg-black shadow-lg z-50">
             <div className = "flex justify-center items-center gap-10 py-4">
 
-                <div className="text-white w-1/3 flex justify-start px-8 font-semibold">
+                <div className="text-white w-1/3 flex justify-start mx-8 font-semibold">
                     HOBBY HUB
                     <div className="text-gray-300">{"-Alpha"}</div>
                 </div>

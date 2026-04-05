@@ -57,7 +57,7 @@ export const ExplorePostsGrid = () => {
     }
 
      return (
-        <div className = "p-8">
+        <div className = "mx-8 mt-4">
             <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
                 {posts.map(post => (
                     <PostCard
