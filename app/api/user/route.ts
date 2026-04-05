@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { moderateText } from "@/lib/moderation";
 
 export async function GET(req: NextRequest) {
     try {
@@ -52,6 +53,15 @@ export async function PATCH(req: NextRequest) {
         const userId = session.user.id;
 
         const {name, body, interests} = await req.json();
+
+        const moderation = await moderateText(name + " " + body);
+
+        if(moderation.flagged) {
+            return NextResponse.json(
+                {error: "Content violates Hobby-Hub's Community Guidelines."},
+                {status: 400}
+            );
+        }
         
         if(interests.length !== 0) {
             await prisma.user.update({
