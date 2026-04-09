@@ -1,13 +1,10 @@
-
-# Sample workflow for building and deploying a Next.js site to GitHub Pages
-#
-# To get started with Next.js see: https://nextjs.org/docs/getting-started
+#this MAY work
 #
 name: Vercel Preview Deployment
 
 on:
   push:
-  branches: ["main"]
+    branches: ["main"]
 
   workflow_dispatch:
 
@@ -38,4 +35,4 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Run Vercel Deploy
-          run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
