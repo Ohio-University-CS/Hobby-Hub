@@ -1,0 +1,36 @@
+name: Vercel Preview Deployment
+
+on:
+  push:
+    branches: ["main"]
+
+    workflow_dispatch:
+
+  jobs:
+    deploy-preview:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+            node-version: "20"
+            cache: "npm"
+            
+        - name: Install Dependencies
+          run: npm install
+
+        - name: Install Vercel CLI
+          run: npm install -g vercel
+
+        - name: Run Vercel Pull
+          run: vercel pull --yes --environment=preview --token=${{secrets.VERCEL_TOKEN}}
+          
+        - name: Run Vercel Build
+          run: vercel build --token=${{secrets.VERCEL_TOKEN}}
+
+        - name: Run Vercel Deploy
+          run: vercel deploy --prebuilt --token=${{secrets.VERCEL_TOKEN}}
