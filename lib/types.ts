@@ -6,6 +6,7 @@ type PostWithRelations = {
     user: {
         id: string;
         name: string;
+        image: string | null;
     };
     interests: {
         id: string;
@@ -17,6 +18,7 @@ type UserWithRelations = {
     id: string;
     name: string;
     body: string | null;
+    image: string | null;
     createdAt: Date;
     interests: {
         id: string;

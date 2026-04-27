@@ -1,0 +1,26 @@
+import { v2 as cloudinary } from 'cloudinary';
+import crypto from 'crypto';
+
+export const dynamic = 'force-dynamic'; // Prevents Next.js from caching the signature
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export async function GET() {
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    
+    const paramsToSign = {
+        folder: 'image',
+        timestamp: timestamp
+    };
+
+    const signature = cloudinary.utils.api_sign_request(
+        paramsToSign,
+        process.env.CLOUDINARY_API_SECRET!
+    );
+
+    return Response.json({ signature, timestamp });
+}

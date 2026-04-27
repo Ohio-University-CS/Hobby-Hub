@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback} from "react";
+import Cropper from 'react-easy-crop';
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,14 +16,52 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 
-export const ProfileForm = () => { 
+// For cropping the image to handle resizing the user's upload.
+async function getCroppedImage(imageSrc: string, pixelCrop: any): Promise<Blob> {
+    const image = new Image();
+    image.src = imageSrc;
 
+    await new Promise((resolve) => (image.onload = resolve));
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const targetSize = 128;
+    canvas.width = targetSize;
+    canvas.height = targetSize;
+
+    if(!ctx) throw new Error("No Context");
+
+    ctx.drawImage(
+        image,
+        pixelCrop.x, pixelCrop.y,
+        pixelCrop.width, pixelCrop.height,
+        0,0, 
+        targetSize, targetSize
+    );
+
+    return new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+            if(blob) resolve(blob);
+        }, "image/jpeg", 0.8);
+    });
+}
+
+export const ProfileForm = () => { 
+    // States
     const [isPending, setIsPending] = useState(false);
     const [loading, setLoading] = useState(true);
-
+    // Cropper
+    const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
+    const [tempImage, setTempImage] = useState<string | null>(null);
+    const [crop, setCrop] = useState({x:0, y:0});
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    // User data
     const [name, setName] = useState("");
     const [body, setBody] = useState("");
-
+    const [image, setImage] = useState("");
+    // Interests
     const [selectedInterests, setSelectedInterests] = useState<any[]>([]);
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [query, setQuery] = useState("");
@@ -39,6 +78,7 @@ export const ProfileForm = () => {
 
                 setName(data.name);
                 setBody(data.body);
+                setImage(data.image || "");
                 setSelectedInterests(data.interests);
             }
             catch {
@@ -50,6 +90,33 @@ export const ProfileForm = () => {
         }
         fetchProfile();
     }, []);
+
+    const onCropComplete = useCallback((_area: any, pixels: any) => {
+        setCroppedAreaPixels(pixels);
+    }, []);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files && e.target.files.length > 0) {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => setTempImage(reader.result as string));
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
+    const handleApplyCrop = async () => {
+        if(!tempImage || !croppedAreaPixels) return;
+        try {
+            const blob = await getCroppedImage(tempImage, croppedAreaPixels);
+            setPendingBlob(blob);
+
+            const previewURL = URL.createObjectURL(blob);
+            setImage(previewURL);
+
+            setTempImage(null);
+        } catch (err) {
+            toast.error("Failed to Crop Image");
+        }
+    }
 
     async function handleSignout() {
         setIsPending(true);
@@ -71,13 +138,35 @@ export const ProfileForm = () => {
 
     async function handleSave(evt: React.SubmitEvent<HTMLFormElement>) {
         evt.preventDefault();
-    
         if(!name.trim()) return toast.error("Name is required");
 
         if(selectedInterests.length === 0) return toast.error("Interests are required")
 
         try {
             setIsPending(true);
+            let finalImageURL = image;
+
+            if(pendingBlob) {
+                const signatureResponse = await fetch(`/api/media/profile`);
+                const {signature, timestamp} = await signatureResponse.json();
+
+                const formData = new FormData();
+                formData.append("file", pendingBlob);
+                formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
+                formData.append("signature", signature);
+                formData.append("timestamp", timestamp);
+                formData.append("folder", "profile");
+
+                const cloudResponse = await fetch(
+                    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                    {method: "POST", body: formData}
+                );
+                
+                const cloudData = await cloudResponse.json();
+                if (!cloudResponse.ok) throw new Error("Cloudinary upload failed");
+
+                finalImageURL = cloudData.secure_url;
+            }
 
             const res = await fetch("/api/user",
                 {
@@ -88,6 +177,7 @@ export const ProfileForm = () => {
                     {
                         name,
                         body,
+                        image: finalImageURL,
                         interests: selectedInterests.map(i => i.id)
                     })
                 }
@@ -98,11 +188,11 @@ export const ProfileForm = () => {
             if(!res.ok) throw new Error(data.error || "Something Went Horricially Wrong!");
 
             toast.success("Profile Updated!");
+        } catch (err: any) { 
+            toast.error(err.message); 
+        } finally {
+            setIsPending(false); 
         }
-
-        catch (err: any) { toast.error(err.message); }
-
-        finally { setIsPending(false); }
     }
 
     async function handleDelete() {
@@ -128,10 +218,11 @@ export const ProfileForm = () => {
 
             toast.success("Profile deleted");
             router.push("/");
+        } catch (err: any) {
+            toast.error(err.message);
+        } finally {
+            setIsPending(false);
         }
-        catch (err: any) { toast.error(err.message); }
-
-        finally { setIsPending(false); }
     }
 
     if(loading) {
@@ -150,6 +241,57 @@ export const ProfileForm = () => {
                 <h1 className = "text-2xl font-bold">
                     User Profile
                 </h1>
+
+                <div className="flex flex-col items-center space-y-4">
+                    <Label
+                        htmlFor="picture"
+                        className="relative group cursor-pointer w-32 h-32 rounded-full overflow-hidden border-2 border-neutral-200 bg-neutral-100 hover:border-neutral-300 transition-all"
+                    >
+                        {image ? (
+                            <img src={image} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-neutral-400">No Image</div>
+                        )}
+
+                        {/* Black background */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black opacity-0 group-hover:opacity-50 transition-opacity"/>
+
+                        {/* Change popup */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-white text-sx font-medium">Change</span>
+                        </div>
+
+                        <Input
+                            id="picture"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageChange}
+                        />
+                    </Label>
+                </div>
+
+                {tempImage && (
+                    <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-4">
+                        <div className="relative w-full max-w-md h-96 bg-white rounded-lg overflow-hidden">
+                            <Cropper
+                                image={tempImage}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={1}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onCropComplete={onCropComplete}
+                            />
+                        </div>
+                        <div className="mt-4 flex gap-4 w-full max-w-md">
+                            <Button className="flex-1 bg-white text-black" onClick={() => setTempImage(null)}>Cancel</Button>
+                            <Button className="flex-1 bg-green-500" onClick={handleApplyCrop} disabled={isPending}>
+                                {isPending ? "Processing..." : "Apply Crop"}
+                            </Button>
+                        </div>
+                    </div>
+                )}
 
                 <form onSubmit={handleSave} className="space-y-2">
                     <Input

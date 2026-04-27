@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
             id: user.id,
             name: user.name,
             body: user.body,
+            image: user.image,
             createdAt: user.createdAt,
             interests: user.userInterests.map(pi => ({
                 id: pi.interest.id,
@@ -52,7 +53,7 @@ export async function PATCH(req: NextRequest) {
 
         const userId = session.user.id;
 
-        const {name, body, interests} = await req.json();
+        const {name, body, interests, image} = await req.json();
 
         const moderation = await moderateText(name + " " + body);
 
@@ -69,6 +70,7 @@ export async function PATCH(req: NextRequest) {
                 data: {
                     name: name,
                     body: body,
+                    image: image,
                     userInterests: {
                         deleteMany: {},
                         create: interests.map((interestId: string) => ({
@@ -82,8 +84,11 @@ export async function PATCH(req: NextRequest) {
             await prisma.user.update({
                 where: {id: userId},
                 data: {
+                    name: name,
+                    body: body,
+                    image: image,
                     userInterests: {
-                        deleteMany: {},
+                        deleteMany: {}
                     }
                 }
             });
