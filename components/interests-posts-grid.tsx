@@ -53,7 +53,7 @@ export const InterestsPostsGrid = () => {
 
      return (
         <div className = "mx-8 mt-4">
-            <div className = "grid gap-6 justify-start" style={{gridTemplateColumns: "repeat(auto-fit, 400px)"}}>
+            <div className = "grid gap-6" style={{gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr)"}}>
                 {posts.map(post => (
                     <PostCard
                         key={post.id}

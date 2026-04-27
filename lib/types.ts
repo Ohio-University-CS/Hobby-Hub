@@ -8,6 +8,7 @@ type PostWithRelations = {
         name: string;
         image: string | null;
     };
+    media: string[];
     interests: {
         id: string;
         name: string;

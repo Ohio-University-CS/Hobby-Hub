@@ -73,21 +73,12 @@ model Post {
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments  Comment[]
-  media     Media[]
+  media     String[]
   reactions Reaction[]
 
   postInterests PostInterest[]
 
   @@map("posts")
-}
-
-model Media {
-  id     String    @id @default(cuid())
-  url    String
-  type   MediaType
-  postId String
-
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Comment {

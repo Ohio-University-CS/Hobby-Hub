@@ -32,6 +32,7 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
             content: post.content,
             createdAt: post.createdAt,
             user: post.user,
+            media: post.media,
             interests: post.postInterests.map(pi => ({
                 id: pi.interest.id,
                 name: pi.interest.name
@@ -41,6 +42,7 @@ export async function GET(req: NextRequest, {params} : RouteContext) {
         return NextResponse.json(response);
     }
     catch (err) {
+        console.error(err!);
         return NextResponse.json({error: "Failed to load post"}, {status: 500});
     }
 }
@@ -52,7 +54,7 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
         if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
         
         const { id } = await params;
-        const {title, content, interests} = await req.json();
+        const {title, content, interests, media} = await req.json();
 
         if(!title) return NextResponse.json({error: "Missing title."}, {status: 400});
         if(!content) return NextResponse.json({error: "Missing content."}, {status: 400});
@@ -87,7 +89,7 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
             data: {
                 title: title,
                 content: content,
-
+                media: media,
                 postInterests: {
                     deleteMany: {},
                     create: interests.map((interestId: string) => ({
@@ -105,6 +107,7 @@ export async function PUT(req: NextRequest, {params} : RouteContext) {
             content: updatedPost.content,
             createdAt: updatedPost.createdAt,
             user: updatedPost.user,
+            media: updatedPost.media,
             interests: updatedPost.postInterests.map(pi => ({
                 id: pi.interest.id,
                 name: pi.interest.name

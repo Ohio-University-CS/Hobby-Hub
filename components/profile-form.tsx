@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState, useCallback} from "react";
 import Cropper from 'react-easy-crop';
+import getCroppedImage from "@/lib/crop-image";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { signOut } from "@/lib/auth-client"
 
 import { toast } from "sonner";
@@ -16,43 +18,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 
-// For cropping the image to handle resizing the user's upload.
-async function getCroppedImage(imageSrc: string, pixelCrop: any): Promise<Blob> {
-    const image = new Image();
-    image.src = imageSrc;
-
-    await new Promise((resolve) => (image.onload = resolve));
-
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    const targetSize = 128;
-    canvas.width = targetSize;
-    canvas.height = targetSize;
-
-    if(!ctx) throw new Error("No Context");
-
-    ctx.drawImage(
-        image,
-        pixelCrop.x, pixelCrop.y,
-        pixelCrop.width, pixelCrop.height,
-        0,0, 
-        targetSize, targetSize
-    );
-
-    return new Promise((resolve) => {
-        canvas.toBlob((blob) => {
-            if(blob) resolve(blob);
-        }, "image/jpeg", 0.8);
-    });
-}
-
 export const ProfileForm = () => { 
     // States
     const [isPending, setIsPending] = useState(false);
     const [loading, setLoading] = useState(true);
     // Cropper
     const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
+
     const [tempImage, setTempImage] = useState<string | null>(null);
     const [crop, setCrop] = useState({x:0, y:0});
     const [zoom, setZoom] = useState(1);
@@ -300,16 +272,37 @@ export const ProfileForm = () => {
                         placeholder="Name"
                         className="h-11 w-full border rounded-md px-3 py-2"    
                     />
+                    
+                    <Tabs defaultValue="edit" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2 mb-2 flex">
+                            <TabsTrigger value="edit" className="border-1 border-black text-black bg-neutral-100 data-[state=active]:text-white data-[state=active]:bg-black">Edit</TabsTrigger>
+                            <TabsTrigger value="preview" className="border-1 border-black text-black bg-neutral-100 data-[state=active]:text-white data-[state=active]:bg-black">Preview</TabsTrigger>
+                        </TabsList>
 
-                    <div className = "space-y-2">
-                        <textarea
-                            value = {body || ""}
-                            onChange = {e => setBody(e.target.value)}
-                            placeholder = "Write your body in markdown.."
-                            className = "h-11 w-full min-h-[150px] border rounded-md px-3 py-2"
-                        />
-                    </div>
+                        <TabsContent value="edit">
+                            <div className = "space-y-2">
+                                <textarea
+                                    value = {body || ""}
+                                    onChange = {e => setBody(e.target.value)}
+                                    placeholder = "Write your body in markdown.."
+                                    className = "h-11 w-full min-h-[150px] border rounded-md px-3 py-2"
+                                />
+                            </div>
+                        </TabsContent>
 
+                        <TabsContent value="preview">
+                            <div className = "border rounded-md p-4 bg-neutral-50">
+                                <div className = "prose max-w-none">
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        rehypePlugins={[rehypeSanitize]}
+                                    >
+                                        {body || "Nothing to Preview Yet"}
+                                    </ReactMarkdown>
+                                </div>
+                            </div>
+                        </TabsContent>
+                    </Tabs>
 
                     <h1 className="text-2xl font-semibold">
                         Your Interests
@@ -370,21 +363,6 @@ export const ProfileForm = () => {
                                 {interest.name}
                             </Button>
                         ))}
-                    </div>
-
-                     <h1 className="text-2xl font-semibold">
-                        Preview
-                    </h1>
-                    
-                    <div className = "border rounded-md p-4 bg-neutral-50">
-                        <div className = "prose max-w-none">
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeSanitize]}
-                            >
-                                {body || "Nothing to Preview Yet"}
-                            </ReactMarkdown>
-                        </div>
                     </div>
 
                     <Button

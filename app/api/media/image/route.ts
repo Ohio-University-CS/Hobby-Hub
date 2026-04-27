@@ -1,7 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-import crypto from 'crypto';
-
-export const dynamic = 'force-dynamic'; // Prevents Next.js from caching the signature
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,

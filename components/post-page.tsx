@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
@@ -13,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { getDayFromCreatedAt } from "@/lib/date-to-day"
 
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "./ui/carousel";
+import { cn } from "@/lib/utils";
 
 export const ViewPostPage = () => {
     const params = useParams();
@@ -22,6 +27,9 @@ export const ViewPostPage = () => {
     const [loading, setLoading] = useState(true);
     const [interests, setInterests] = useState<any[]>([]);
     const router = useRouter();
+
+    const [api, setApi] = useState<CarouselApi>();
+    const [current, setCurrent] = useState(0);
     
     useEffect(() => {
         if(!postId) return;
@@ -47,7 +55,16 @@ export const ViewPostPage = () => {
         }
         
         if(postId) fetchPost();
-    }, [postId]);
+
+        if (!api) return;
+
+        setCurrent(api.selectedScrollSnap());
+
+        api.on("select", () => {
+            setCurrent(api.selectedScrollSnap());
+        });
+
+    }, [postId, api]);
 
     if(loading) {
         return (
@@ -66,7 +83,7 @@ export const ViewPostPage = () => {
     }
 
     return (
-        <div className="max-w-3xl mx-auto p-8 space-y-6 bg-white rounded-2xl shadow shadow-2xl mt-4">
+        <div className="max-w-6xl mx-auto p-8 space-y-6 bg-white rounded-2xl shadow shadow-2xl mt-4">
 
             <Button
                 variant="outline"
@@ -77,6 +94,57 @@ export const ViewPostPage = () => {
             >
                 Back
             </Button>
+
+            {post.media.length > 0 && (
+                <div className="">
+                    <Carousel
+                        setApi={setApi}
+                        opts={{
+                            loop: false,
+                            align: "start"
+                        }}
+                        className="w-full"
+                    >
+                        <CarouselContent>
+                            {post.media.map((url: string, index: number) => (
+                                <CarouselItem key={index}>
+                                    <div className="aspect-[16/9] relative overflow-hidden rounded-xl border bg-black flex items-center justify-center">
+                                        <Zoom>
+                                            <img
+                                                src={url}
+                                                alt={`Post media ${index + 1}`}
+                                                className="max-h-full max-w-full object-contain cursor-zoom-in transition-transform hover:scale-[1.02]"
+                                            />
+                                        </Zoom>
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+
+                        {post.media.length > 1 && (
+                            <>
+                                <CarouselPrevious className="left-5 h-10 w-10 border-none text-white mix-blend-difference"/>
+                                <CarouselNext className="right-5 h-10 w-10 border-none text-white  mix-blend-difference"/>
+                            </>
+                        )}
+                    </Carousel>
+
+                    {post.media.length > 1 && (
+                        <div className="flex justify-center items-center gap-2 mt-4">
+                            {post.media.map((url: string, index: number ) => (
+                                <button
+                                    key={index}
+                                    onClick={() => api?.scrollTo(index)}
+                                    className={cn(
+                                        "h-2 rounded-full transition-all duration-300",
+                                        current === index ? "bg-black w-6" : "bg-neutral-300 w-2 hover:bg-neutral-400"
+                                    )}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
 
             <h1 className="text-3xl font-bold mb-6">
                 {post.title}
