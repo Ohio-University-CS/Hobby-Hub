@@ -86,6 +86,7 @@ export async function GET(req: NextRequest) {
             content: post.content,
             createdAt: post.createdAt,
             user: post.user,
+            media: post.media,
             interests: post.postInterests.map(pi => ({
                 id: pi.interest.id,
                 name: pi.interest.name
