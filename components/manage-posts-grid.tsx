@@ -53,11 +53,25 @@ export const ManagePostsGrid = () => {
             <div className="grid gap-6" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr)" }}>
                 <Card
                     onClick={() => router.push(`/posts/new`)}
-                    className="p-0 hover:bg-white cursor-pointer border border-dashed border-2 border-neutral-500 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
+                    className="p-0 bg-white cursor-pointer border-2 border-dashed border-neutral-300 rounded-lg shadow hover:shadow-xl transition flex flex-col overflow-hidden group"
                 >
-                    <CardContent>
-                        + New Post
-                    </CardContent>
+                    {/* Media */}
+                    <div className="relative w-full aspect-video bg-neutral-50 flex items-center justify-center border-b border-dashed border-neutral-200">
+                        <span className="text-4xl font-light text-neutral-400 group-hover:scale-110 transition-transform">+</span>
+                    </div>
+
+                    <div className="p-3 flex items-start space-x-3 opacity-60">
+                        {/* Avatar */}
+                        <div className="w-12 h-12 rounded-full bg-neutral-200 flex-shrink-0 mt-0.5" />
+
+                        <div className="min-w-0 flex-1 space-y-2">
+                            {/* Title */}
+                            <div className="h-4 bg-neutral-200 rounded w-3/4" />
+                            {/* Subtitle */}
+                            <div className="h-3 bg-neutral-100 rounded w-1/2" />
+                            <div className="h-3 bg-neutral-50 rounded w-1/4 mb-6" />
+                        </div>
+                    </div>
                 </Card>
 
                 {posts.map(post => (
