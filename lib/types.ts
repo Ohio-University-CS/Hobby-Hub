@@ -19,7 +19,7 @@ type PostWithRelations = {
     }[];
     _count?: {
         hearts: number;
-    }
+    };
 };
 
 type UserWithRelations = {
@@ -37,4 +37,6 @@ type UserWithRelations = {
         postId: string;
         post: PostWithRelations;
     }[];
+
+    isAdmin: boolean;
 };

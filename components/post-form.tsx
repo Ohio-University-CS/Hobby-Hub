@@ -80,23 +80,28 @@ export const PostForm = ({ postId }: { postId?: string }) => {
 
         async function fetchPost() {
             try {
-                const res = await fetch(`/api/posts/${postId}`, { credentials: "include" });
-                if (!res.ok) throw new Error();
+                const postResponse = await fetch(`/api/posts/${postId}`, { credentials: "include" });
+                if (!postResponse.ok) throw new Error();
 
-                const data = await res.json();
+                const postData = await postResponse.json();
 
-                if(data.user.id !== currentUserId) {
+                const userResponse = await fetch(`/api/user`, {credentials: "include"});
+                if(!userResponse.ok) throw new Error();
+
+                const userData = await userResponse.json();
+
+                if(!userData.isAdmin && postData.user.id !== userData.id) {
                     toast.error("You do not have permission to access this.");
-                    router.push(`/posts/${data.id}`);
+                    router.push(`/posts/${postData.id}`);
                     return;
                 }
 
-                setTitle(data.title);
-                setContent(data.content);
-                setSelectedInterests(data.interests);
+                setTitle(postData.title);
+                setContent(postData.content);
+                setSelectedInterests(postData.interests);
 
-                if (data.media) {
-                    setMedia(data.media.map((m: string, i: number) => ({
+                if (postData.media) {
+                    setMedia(postData.media.map((m: string, i: number) => ({
                         id: `${i}`,
                         url: m,
                         blob: null

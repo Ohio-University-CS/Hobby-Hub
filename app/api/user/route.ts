@@ -6,7 +6,6 @@ import { moderateContent } from "@/lib/moderation";
 export async function GET(req: NextRequest) {
     try {
         const session = await auth.api.getSession({ headers: req.headers });
-
         if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
 
         const userId = session.user.id;
@@ -31,6 +30,7 @@ export async function GET(req: NextRequest) {
             name: user.name,
             body: user.body,
             image: user.image,
+            isAdmin: user.isAdmin,
             createdAt: user.createdAt,
             interests: user.userInterests.map(pi => ({
                 id: pi.interest.id,

@@ -55,8 +55,10 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
 export async function PUT(req: NextRequest, { params }: RouteContext) {
     try {
         const session = await auth.api.getSession({ headers: req.headers });
+        if (!session) return NextResponse.json({ erro: "Invalid Session" }, { status: 401 });
 
-        if (!session?.user) return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+        const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+        if (!user) return NextResponse.json({ erro: "User not found" }, { status: 401 });
 
         const { id } = await params;
         const { title, content, interests, media } = await req.json();
@@ -68,7 +70,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
         const post = await prisma.post.findUnique({ where: { id: id } });
         if (!post) return NextResponse.json({ error: "Post not found" }, { status: 400 });
 
-        if (post.userId !== session.user.id) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        if (!user.isAdmin && (post.userId !== user.id)) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
         const moderation = await moderateContent(content + " " + title, []);
 
@@ -136,14 +138,29 @@ export async function DELETE(req: NextRequest, { params }: RouteContext) {
     try {
         const session = await auth.api.getSession({ headers: req.headers });
 
-        if (!session?.user) return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+        if (!session) return NextResponse.json({ erro: "Invalid Session" }, { status: 400 });
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id: session.user.id
+            },
+            include: {
+                userInterests: {
+                    include: {
+                        interest: true
+                    }
+                }
+            }
+        });
+
+        if (!user) return NextResponse.json({ erro: "User not found" }, { status: 400 });
 
         const { id } = await params;
 
         const post = await prisma.post.findUnique({ where: { id: id } });
         if (!post) return NextResponse.json({ error: "Post not found" }, { status: 400 });
 
-        if (post.userId !== session.user.id) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        if (post.userId !== user.id) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
         await prisma.postInterest.deleteMany({
             where: { postId: id }

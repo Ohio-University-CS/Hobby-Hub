@@ -57,6 +57,8 @@ model User {
     body   String?
     hearts Heart[]
 
+    isAdmin Boolean @default(false)
+
     userInterests UserInterest[]
 
     @@unique([email])
