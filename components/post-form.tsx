@@ -229,7 +229,6 @@ export const PostForm = ({ postId }: { postId?: string }) => {
         <div className="flex items-center justify-center">
 
             <div className="w-full max-w-2xl p-8 space-y-6 border border-neutral-200 rounded-2xl shadow-xl">
-
                 <Button
                     variant="outline"
                     type="button"
@@ -282,9 +281,22 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                     />
 
                     <Tabs defaultValue="edit" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 mb-2 flex">
-                            <TabsTrigger value="edit" className="border-1 border-black text-black bg-neutral-100 data-[state=active]:text-white data-[state=active]:bg-black">Edit</TabsTrigger>
-                            <TabsTrigger value="preview" className="border-1 border-black text-black bg-neutral-100 data-[state=active]:text-white data-[state=active]:bg-black">Preview</TabsTrigger>
+                        <TabsList className="w-full grid grid-cols-2 p-0 rounded-none mb-0 flex">
+                            <TabsTrigger
+                                value="edit"
+                                className="rounded-none rounded-l-lg border-1 border-black text-black bg-neutral-100 
+                                           data-[state=active]:text-white data-[state=active]:bg-black"
+                            >
+                                Edit
+                            </TabsTrigger>
+
+                            <TabsTrigger
+                                value="preview"
+                                className="rounded-none rounded-r-lg border-1 border-black text-black bg-neutral-100 
+                                           data-[state=active]:text-white data-[state=active]:bg-black"
+                            >
+                                Preview
+                            </TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="edit">
