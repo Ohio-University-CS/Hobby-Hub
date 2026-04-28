@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "./ui/card";
 import { Trash2 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -71,6 +72,9 @@ export const PostForm = ({ postId }: { postId?: string }) => {
 
     const router = useRouter();
 
+    const { data: session } = authClient.useSession();
+    const currentUserId = session?.user?.id;
+
     useEffect(() => {
         if (!isEditing) return;
 
@@ -80,6 +84,12 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                 if (!res.ok) throw new Error();
 
                 const data = await res.json();
+
+                if(data.user.id !== currentUserId) {
+                    toast.error("You do not have permission to access this.");
+                    router.push(`/posts/${data.id}`);
+                    return;
+                }
 
                 setTitle(data.title);
                 setContent(data.content);
@@ -165,9 +175,7 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                     { method: "POST", body: formData }
                 );
 
-
                 const data = await cloudResponse.json();
-                console.log("HELLO!!", data!);
                 return data.secure_url;
             });
 

@@ -139,6 +139,18 @@ export const ViewPostPage = () => {
                 Back
             </Button>
 
+            {post.user.id === currentUserId && (
+                <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => router.push(`/posts/edit/${post.id}`)}
+                    disabled={false}
+                    className="bg-yellow-500 text-black border-0 mx-2"
+                >
+                    Edit Post
+                </Button>
+            )}
+
             {post.media.length > 0 && (
                 <div className="">
                     <Carousel
