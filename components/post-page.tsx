@@ -31,25 +31,35 @@ export const ViewPostPage = () => {
     const [interests, setInterests] = useState<any[]>([]);
     const router = useRouter();
 
+    const [user, setUser] = useState<any | null>(null);
+
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
-
-    const { data: session } = authClient.useSession();
-
-    const currentUserId = session?.user?.id;
 
     useEffect(() => {
         if (!postId) return;
 
         async function fetchPost() {
             try {
-                const res = await fetch(`/api/posts/${postId}`, { credentials: "include", });
-                if (!res.ok) throw new Error("Failed to fetch post");
+                const postResponse = await fetch(`/api/posts/${postId}`, { credentials: "include", });
+                if (!postResponse.ok) throw new Error("Failed to fetch post");
 
-                const data = await res.json();
+                const postData = await postResponse.json();
 
-                setPost(data);
-                setInterests(data.interests);
+                try {
+                    const userResponse = await fetch(`/api/user`, { credentials: "include", });
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+                        setUser(userData);
+                    } else {
+                        setUser(null);
+                    }
+                } catch (userErr) {
+                    setUser(null);
+                }
+
+                setPost(postData);
+                setInterests(postData.interests);
             }
             catch (err: any) {
                 console.error(err);
@@ -85,16 +95,16 @@ export const ViewPostPage = () => {
     const toggleHeart = async () => {
         if (!post) return;
 
-        if (!currentUserId) {
+        if (!user.id) {
             toast.error("You must be logged in to heart posts");
             return;
         }
 
-        const isHearted = post.hearts.some((h: { userId: string }) => h.userId === currentUserId);
+        const isHearted = post.hearts.some((h: { userId: string }) => h.userId === user.id);
 
         const updatedHearts = isHearted
-            ? post.hearts.filter((h: { userId: string }) => h.userId !== currentUserId)
-            : [...post.hearts, { userId: currentUserId }];
+            ? post.hearts.filter((h: { userId: string }) => h.userId !== user.id)
+            : [...post.hearts, { userId: user.id }];
 
         setPost({ ...post, hearts: updatedHearts });
 
@@ -124,7 +134,7 @@ export const ViewPostPage = () => {
         );
     }
 
-    const isHeartedByMe = post.hearts.some((h: { userId: string }) => h.userId === currentUserId);
+    const isHeartedByMe = post.hearts.some((h: { userId: string }) => h.userId === user.id);
     const userColor = getUserColor(post.user?.id || "default");
 
     return (
@@ -139,7 +149,7 @@ export const ViewPostPage = () => {
                 Back
             </Button>
 
-            {post.user.id === currentUserId && (
+            {(user?.isAdmin || post.user.id === user?.id) && (
                 <Button
                     variant="outline"
                     type="button"

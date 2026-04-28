@@ -86,7 +86,11 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                 const postData = await postResponse.json();
 
                 const userResponse = await fetch(`/api/user`, {credentials: "include"});
-                if(!userResponse.ok) throw new Error();
+                if(!userResponse.ok) {
+                    toast.error("You do not have permission to access this.");
+                    router.push(`/posts/${postData.id}`);
+                    throw new Error();
+                }
 
                 const userData = await userResponse.json();
 
