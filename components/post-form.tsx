@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "./ui/card";
+import { Trash2 } from "lucide-react";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,16 @@ const SortableMediaCard = ({ id, url, onRemove }: { id: string, url: string, onR
         <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="relative group flex-shrink-0">
             <Card className="w-40 h-40 overflow-hidden border-2 border-neutral-200 shadow-md">
                 <img src={url} alt="upload-preview" className="w-full h-full object-cover" />
+
+                {/* Trash Icon Overlay */}
+                <button
+                    type="button"
+                    onPointerDown={(e) => e.stopPropagation()} 
+                    onClick={() => onRemove(id)}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 shadow-lg"
+                >
+                    <Trash2 size={16} />
+                </button>
             </Card>
         </div>
     )

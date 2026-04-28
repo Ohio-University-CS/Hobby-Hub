@@ -70,7 +70,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
 
         if (post.userId !== session.user.id) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-        const moderation = await moderateContent(content + " " + title, post.media || []);
+        const moderation = await moderateContent(content + " " + title, []);
 
         if (moderation.flagged) {
             return NextResponse.json(

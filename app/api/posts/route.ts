@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         if (!content) return NextResponse.json({ error: "Missing content." }, { status: 400 });
         if (!interests) return NextResponse.json({ error: "Missing interests." }, { status: 400 });
 
-        const moderation = await moderateContent(content + " " + title, media || []);
+        const moderation = await moderateContent(content + " " + title, []);
 
         if (moderation.flagged) {
             return NextResponse.json(
