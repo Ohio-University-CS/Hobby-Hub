@@ -366,7 +366,7 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                                 disabled={isPending}
                                 className="w-full h-11 bg-black text-white inline-flex w-auto h-auto"
                                 onClick={() => {
-                                    setSelectedInterests(prev => prev.filter(i => i.id !== interest.interest.id));
+                                    setSelectedInterests(prev => prev.filter(i => i.id !== interest.id));
                                 }}
                             >
                                 {interest.name}

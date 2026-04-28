@@ -5,158 +5,151 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+    provider = "prisma-client"
+    output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
 }
 
 model Interest {
-  id   String @id @default(cuid())
-  name String @unique
+    id   String @id @default(cuid())
+    name String @unique
 
-  posts PostInterest[]
-  users UserInterest[]
+    posts PostInterest[]
+    users UserInterest[]
 }
 
 model PostInterest {
-  postId     String
-  interestId String
+    postId     String
+    interestId String
 
-  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  interest Interest @relation(fields: [interestId], references: [id])
+    post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    interest Interest @relation(fields: [interestId], references: [id])
 
-  @@id([postId, interestId])
+    @@id([postId, interestId])
 }
 
 model UserInterest {
-  userId     String
-  interestId String
+    userId     String
+    interestId String
 
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  interest Interest @relation(fields: [interestId], references: [id])
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    interest Interest @relation(fields: [interestId], references: [id])
 
-  @@id([userId, interestId])
+    @@id([userId, interestId])
 }
 
 model User {
-  id            String     @id
-  name          String
-  email         String
-  emailVerified Boolean    @default(false)
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  posts         Post[]
-  comments      Comment[]
-  reactions     Reaction[]
+    id            String    @id
+    name          String
+    email         String
+    emailVerified Boolean   @default(false)
+    image         String?
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    sessions      Session[]
+    accounts      Account[]
+    posts         Post[]
+    comments      Comment[]
 
-  body String?
+    body   String?
+    hearts Heart[]
 
-  userInterests UserInterest[]
+    userInterests UserInterest[]
 
-  @@unique([email])
-  @@map("user")
+    @@unique([email])
+    @@map("user")
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  title     String
-  content   String
-  userId    String
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments  Comment[]
-  media     String[]
-  reactions Reaction[]
+    title    String
+    content  String
+    userId   String
+    user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    comments Comment[]
+    media    String[]
 
-  postInterests PostInterest[]
+    views  Int     @default(0)
+    hearts Heart[]
 
-  @@map("posts")
+    postInterests PostInterest[]
+
+    @@map("posts")
+}
+
+model Heart {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, postId])
 }
 
 model Comment {
-  id     String @id @default(cuid())
-  body   String
-  postId String
-  userId String
+    id     String @id @default(cuid())
+    body   String
+    postId String
+    userId String
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Reaction {
-  id     String       @id @default(cuid())
-  type   ReactionType
-  postId String
-  userId String
-
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId])
-}
-
-enum ReactionType {
-  LIKE
-  DISLIKE
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id        String   @id
+    expiresAt DateTime
+    token     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    ipAddress String?
+    userAgent String?
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
-  @@index([userId])
-  @@map("session")
+    @@unique([token])
+    @@index([userId])
+    @@map("session")
 }
 
 model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+    id                    String    @id
+    accountId             String
+    providerId            String
+    userId                String
+    user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    accessToken           String?
+    refreshToken          String?
+    idToken               String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
 
-  @@index([userId])
-  @@map("account")
+    @@index([userId])
+    @@map("account")
 }
 
 model Verification {
-  id         String   @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+    id         String   @id
+    identifier String
+    value      String
+    expiresAt  DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 
-  @@index([identifier])
-  @@map("verification")
+    @@index([identifier])
+    @@map("verification")
 }

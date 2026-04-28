@@ -10,6 +10,9 @@ export async function GET(req: NextRequest) {
     
         const posts = await prisma.post.findMany({
             include: {
+                hearts: {
+                    select: {userId: true}
+                },
                 user: true,
                 postInterests: {
                     include: {
@@ -31,6 +34,8 @@ export async function GET(req: NextRequest) {
                 id: pi.interest.id,
                 name: pi.interest.name
             })),
+            views: post.views,
+            hearts: post.hearts
         }));
 
         return NextResponse.json(response);

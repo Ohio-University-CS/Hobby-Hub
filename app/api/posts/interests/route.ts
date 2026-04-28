@@ -4,19 +4,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     try {
-        const session = await auth.api.getSession({headers: req.headers});
-    
-        if(!session?.user) {
-            return NextResponse.json({error: "Not authorized"}, {status: 401});
+        const session = await auth.api.getSession({ headers: req.headers });
+
+        if (!session?.user) {
+            return NextResponse.json({ error: "Not authorized" }, { status: 401 });
         }
 
         const user = await prisma.user.findUnique({
-            where: {id: session.user?.id},
-            include: {userInterests: true}
+            where: { id: session.user?.id },
+            include: { userInterests: true }
         });
 
         const interestIds = user?.userInterests.map(ui => ui.interestId) || [];
-    
+
         const posts = await prisma.post.findMany({
             where: {
                 postInterests: {
@@ -33,9 +33,12 @@ export async function GET(req: NextRequest) {
                         interest: true
                     }
                 },
-                user: true
+                user: true,
+                hearts: {
+                    select: { userId: true }
+                }
             },
-            orderBy: {createdAt: "desc"}
+            orderBy: { createdAt: "desc" }
         });
 
         const response: PostWithRelations[] = posts.map(post => ({
@@ -48,13 +51,15 @@ export async function GET(req: NextRequest) {
             interests: post.postInterests.map(pi => ({
                 id: pi.interest.id,
                 name: pi.interest.name
-            }))
+            })),
+            views: post.views,
+            hearts: post.hearts
         }));
 
         return NextResponse.json(response);
     }
     catch (err) {
         console.error(err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

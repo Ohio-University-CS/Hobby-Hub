@@ -13,6 +13,13 @@ type PostWithRelations = {
         id: string;
         name: string;
     }[];
+    views: number;
+    hearts: {
+        userId: string;
+    }[];
+    _count?: {
+        hearts: number;
+    }
 };
 
 type UserWithRelations = {
@@ -24,5 +31,10 @@ type UserWithRelations = {
     interests: {
         id: string;
         name: string;
+    }[];
+
+    heartedPosts?: {
+        postId: string;
+        post: PostWithRelations;
     }[];
 };
