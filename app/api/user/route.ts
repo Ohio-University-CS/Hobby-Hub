@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest) {
 
         const {name, body, interests, image} = await req.json();
 
-        const moderation = await moderateContent(name + " " + body, image);
+        const moderation = await moderateContent(name + " " + body);
 
         if(moderation.flagged) {
             return NextResponse.json(

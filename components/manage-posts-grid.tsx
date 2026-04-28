@@ -53,7 +53,7 @@ export const ManagePostsGrid = () => {
             <div className = "grid gap-6" style={{gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr)"}}>
                 <Card
                     onClick={() => router.push(`/posts/new`)}
-                    className="p-0 hover:bg-white cursor-pointer border border-dashed border-2 border-neutral-500 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden"
+                    className="p-0 hover:bg-white cursor-pointer border border-dashed border-2 border-neutral-500 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
                 >
                     <CardContent>
                         + New Post
