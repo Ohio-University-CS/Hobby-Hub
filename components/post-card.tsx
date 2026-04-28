@@ -15,7 +15,7 @@ export function PostCard({ post, router, href }: { post: PostWithRelations; rout
             onClick={() => router.push(href)}
             className="p-0 bg-white cursor-pointer border border-neutral-200 rounded-lg shadow hover:shadow-xl transition flex flex-col overflow-hidden"
         >
-            <div className="relative w-full aspect-video rounded-lg">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                 {post.media && post.media.length > 0 ? (
                     <img
                         src={post.media[0]}
