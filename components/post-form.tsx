@@ -245,7 +245,7 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                 <div className="w-full overflow-x-auto overflow-y-hidden pb-4 scrollbar-hide">
                     <div className="flex items-center space-x-4 min-w-max px-2">
 
-                        <label className="cursor-pointer border-dashed border-2 border-neutral-300 rounded-lg w-40 h-40 flex flex-col items-center justify-center text-neutral-500 hover:bg-neutral-50 transition flex-shrink-0">
+                        <label className="cursor-pointer border-dashed border-2 border-neutral-500 rounded-lg w-40 h-40 flex flex-col items-center justify-center text-neutral-500 hover:bg-white transition flex-shrink-0">
                             <span className="text-3xl font-light">+</span>
                             <span className="text-xs mt-1">Add Media</span>
                             <input type="file" accept="image/*" className="hidden" onChange={handleMediaUpload} />
