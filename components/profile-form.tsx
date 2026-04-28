@@ -338,7 +338,7 @@ export const ProfileForm = () => {
                             setSuggestions(data);
                         }}
 
-                        placeholder = "Add relevant interests.."
+                        placeholder = "Search for relevant interests.."
                     />
 
                     {suggestions.length > 0 && (

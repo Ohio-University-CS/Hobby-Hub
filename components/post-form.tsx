@@ -203,6 +203,12 @@ export const PostForm = ({ postId }: { postId?: string }) => {
         }
     }
 
+    async function handleNav() {
+        if(!postId) return;
+
+        router.push(`/posts/${postId}`);
+    }
+
     async function handleDelete() {
 
         if (!postId) return;
@@ -357,7 +363,7 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                             setSuggestions(data);
                         }}
 
-                        placeholder="Add relevant interests.."
+                        placeholder="Search for relevant interests.."
                     />
 
                     {suggestions.length > 0 && (
@@ -397,6 +403,17 @@ export const PostForm = ({ postId }: { postId?: string }) => {
                         ))}
                     </div>
 
+                    {isEditing && (
+                         <Button
+                            type="button"
+                            onClick={handleNav}
+                            disabled={isPending}
+                            className="w-full h-11 bg-black text-white"
+                        >
+                            View Post
+                        </Button>
+                    )}
+
                     <Button
                         type="submit"
                         disabled={isPending}
@@ -410,7 +427,6 @@ export const PostForm = ({ postId }: { postId?: string }) => {
 
                     {isEditing && (
                         <Button
-                            variant="outline"
                             type="button"
                             onClick={handleDelete}
                             disabled={isPending}
