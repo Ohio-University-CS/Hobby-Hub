@@ -1,9 +1,9 @@
-import { ViewPostPage } from "@/components/post-page"
+import { ViewPostPage } from "@/components/post-page";
 
 const PostPage = () => {
     return (
         <div>
-            <ViewPostPage/>
+            <ViewPostPage />
         </div>
     );
 };

@@ -90,10 +90,10 @@ export const ViewPostPage = () => {
             return;
         }
 
-        const isHearted = post.hearts.some((h: {userId: string}) => h.userId === currentUserId);
+        const isHearted = post.hearts.some((h: { userId: string }) => h.userId === currentUserId);
 
         const updatedHearts = isHearted
-            ? post.hearts.filter((h: {userId: string}) => h.userId !== currentUserId)
+            ? post.hearts.filter((h: { userId: string }) => h.userId !== currentUserId)
             : [...post.hearts, { userId: currentUserId }];
 
         setPost({ ...post, hearts: updatedHearts });
@@ -124,7 +124,7 @@ export const ViewPostPage = () => {
         );
     }
 
-    const isHeartedByMe = post.hearts.some((h: {userId: string}) => h.userId === currentUserId);
+    const isHeartedByMe = post.hearts.some((h: { userId: string }) => h.userId === currentUserId);
     const userColor = getUserColor(post.user?.id || "default");
 
     return (
@@ -228,7 +228,7 @@ export const ViewPostPage = () => {
                     <div className="flex flex-row items-center gap-1 text-neutral-800">
                         {/* Views Row */}
                         <div className="flex flex-row items-center gap-1 text-neutral-800">
-                            <Eye className="w-5 h-5"/>
+                            <Eye className="w-5 h-5" />
                             <span className="text-lg font-semibold">{post.views}</span>
                         </div>
 
@@ -237,7 +237,7 @@ export const ViewPostPage = () => {
                             onClick={toggleHeart}
                             className="flex flex-col items-center gap-1 group transition-all active:scale-95"
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                                 <Heart className={cn(
                                     "w-5 h-5 transition-colors",
                                     isHeartedByMe ? "fill-red-500 stroke-red-500" : "group-hover:stroke-red-400"
