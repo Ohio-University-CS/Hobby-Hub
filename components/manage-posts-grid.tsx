@@ -21,12 +21,12 @@ export const ManagePostsGrid = () => {
                     credentials: "include",
                 });
 
-                if(!res.ok) throw new Error("Failed to fetch posts");
+                if (!res.ok) throw new Error("Failed to fetch posts");
 
                 const data = await res.json();
                 setPosts(data);
             }
-            catch(err: any) {
+            catch (err: any) {
                 console.error(err);
                 toast.error(err.message || "Error loading posts");
             }
@@ -38,10 +38,10 @@ export const ManagePostsGrid = () => {
         fetchPosts();
     }, []);
 
-    if(loading) {
+    if (loading) {
         return (
-            <div className = "flex items-center justify-center">
-                <p className = "text-muted-foreground text-2xl font-semibold">
+            <div className="flex items-center justify-center">
+                <p className="text-muted-foreground text-2xl font-semibold">
                     Loading posts..
                 </p>
             </div>
@@ -49,8 +49,8 @@ export const ManagePostsGrid = () => {
     }
 
     return (
-        <div className = "mx-8 mt-4">
-            <div className = "grid gap-6" style={{gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr)"}}>
+        <div className="mx-8 mt-4">
+            <div className="grid gap-6" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr)" }}>
                 <Card
                     onClick={() => router.push(`/posts/new`)}
                     className="p-0 hover:bg-white cursor-pointer border border-dashed border-2 border-neutral-500 rounded-lg shadow hover:shadow-2xl transition flex flex-col items-center justify-center text-center text-lg font-medium overflow-hidden aspect-[4/3]"
@@ -65,7 +65,7 @@ export const ManagePostsGrid = () => {
                         key={post.id}
                         post={post}
                         router={router}
-                        href={`/posts/edit/${post.id}`}
+                        href={`/posts/${post.id}`}
                     />
                 ))}
             </div>
