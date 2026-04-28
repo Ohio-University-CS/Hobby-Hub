@@ -1,68 +1,89 @@
 import { auth } from "@/lib/auth";
-import { moderateText } from "@/lib/moderation";
+import { moderateContent } from "@/lib/moderation";
 import { prisma } from "@/lib/prisma";
 
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
 
-    const session = await auth.api.getSession({ headers: req.headers });
-
-    if(!session?.user) return NextResponse.json({error: "Not authorized"}, {status: 401});
-
-    let body: {
-        title?: string;
-        content?: string;
-        interests?: string[]
-    } = {};
-
     try {
-        body = await req.json();
-    }
-    catch {
-        return NextResponse.json({error: "Invalid JSON"}, {status: 400});
-    }
+        const session = await auth.api.getSession({ headers: req.headers });
 
-    const {title, content, interests = []} = body;
+        if (!session?.user) return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
-    if(!title || !content || !interests) return NextResponse.json({error: "Missing fields"}, {status: 400});
+        const { title, content, interests, media } = await req.json();
 
-    const moderation = await moderateText(content + " " + title);
+        if (!title) return NextResponse.json({ error: "Missing title." }, { status: 400 });
+        if (!content) return NextResponse.json({ error: "Missing content." }, { status: 400 });
+        if (!interests) return NextResponse.json({ error: "Missing interests." }, { status: 400 });
 
-    if(moderation.flagged) {
-        return NextResponse.json(
-            {error: "Content violates Hobby-Hub's Community Guidelines."},
-            {status: 400}
-        );
-    }
-    
-    const post = await prisma.post.create({
-        data: {
-            title,
-            content,
-            userId: session.user.id,
+        const moderation = await moderateContent(content + " " + title, media || []);
 
-            postInterests: {
-                create: interests.map((interestId) => ({
-                    interest: {
-                        connect: {id: interestId}
+        if (moderation.flagged) {
+            return NextResponse.json(
+                { error: "Content violates Hobby-Hub's Community Guidelines." },
+                { status: 400 }
+            );
+        }
+
+        const post = await prisma.post.create({
+            include: {
+                user: true,
+                hearts: {
+                    select: { userId: true }
+                },
+                postInterests: {
+                    include: {
+                        interest: true
                     }
-                }))
-            }
-        },
-    });
+                }
+            },
+            data: {
+                title,
+                content,
+                userId: session.user.id,
+                media,
+                postInterests: {
+                    create: interests.map((interestId: number) => ({
+                        interest: {
+                            connect: { id: interestId }
+                        }
+                    }))
+                }
+            },
+        });
 
-    return NextResponse.json(post);
+        const response: PostWithRelations = {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            createdAt: post.createdAt,
+            user: post.user,
+            media: post.media,
+            interests: post.postInterests.map(pi => ({
+                id: pi.interest.id,
+                name: pi.interest.name
+            })),
+            views: post.views,
+            hearts: post.hearts
+        };
+
+        return NextResponse.json(response);
+    }
+
+    catch (err) {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
 }
 
 export async function GET(req: NextRequest) {
     try {
-        const session = await auth.api.getSession({headers: req.headers});
-    
-        if(!session?.user) {
-            return NextResponse.json({error: "Not authorized"}, {status: 401});
+        const session = await auth.api.getSession({ headers: req.headers });
+
+        if (!session?.user) {
+            return NextResponse.json({ error: "Not authorized" }, { status: 401 });
         }
-    
+
         const posts = await prisma.post.findMany({
             include: {
                 user: true,
@@ -72,10 +93,10 @@ export async function GET(req: NextRequest) {
                     }
                 },
                 hearts: {
-                    select: {userId: true}
+                    select: { userId: true }
                 }
             },
-            orderBy: {createdAt: "desc"}
+            orderBy: { createdAt: "desc" }
         });
 
         const response: PostWithRelations[] = posts.map(post => ({
@@ -97,6 +118,6 @@ export async function GET(req: NextRequest) {
     }
     catch (err) {
         console.error(err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

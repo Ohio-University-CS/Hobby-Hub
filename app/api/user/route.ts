@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { moderateText } from "@/lib/moderation";
+import { moderateContent } from "@/lib/moderation";
 
 export async function GET(req: NextRequest) {
     try {
@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest) {
 
         const {name, body, interests, image} = await req.json();
 
-        const moderation = await moderateText(name + " " + body);
+        const moderation = await moderateContent(name + " " + body, image);
 
         if(moderation.flagged) {
             return NextResponse.json(

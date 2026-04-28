@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { moderateText } from "@/lib/moderation";
+import { moderateContent } from "@/lib/moderation";
 import { prisma } from "@/lib/prisma";
 import { Route } from "next";
 import { NextRequest, NextResponse } from "next/server";
@@ -70,7 +70,7 @@ export async function PUT(req: NextRequest, { params }: RouteContext) {
 
         if (post.userId !== session.user.id) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-        const moderation = await moderateText(content + " " + title);
+        const moderation = await moderateContent(content + " " + title, post.media || []);
 
         if (moderation.flagged) {
             return NextResponse.json(
