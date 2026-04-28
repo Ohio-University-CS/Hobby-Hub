@@ -12,7 +12,6 @@ import { signOut } from "@/lib/auth-client"
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { error } from "console";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -47,7 +46,7 @@ export const ProfileForm = () => {
                 if(!res.ok) throw new Error();
 
                 const data = await res.json();
-
+                
                 setName(data.name);
                 setBody(data.body);
                 setImage(data.image || "");
@@ -222,7 +221,7 @@ export const ProfileForm = () => {
                         {image ? (
                             <img src={image} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
-                            <div className="flex items-center justify-center h-full text-neutral-400">No Image</div>
+                            <div className="flex items-center justify-center w-full h-full text-neutral-400">No Image</div>
                         )}
 
                         {/* Black background */}
