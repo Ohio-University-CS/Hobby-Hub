@@ -75,6 +75,9 @@ export async function GET(req: NextRequest) {
                     include: {
                         interest: true
                     }
+                },
+                hearts: {
+                    select: {userId: true}
                 }
             },
             orderBy: {createdAt: "desc"}
@@ -90,7 +93,9 @@ export async function GET(req: NextRequest) {
             interests: post.postInterests.map(pi => ({
                 id: pi.interest.id,
                 name: pi.interest.name
-            }))
+            })),
+            views: post.views,
+            hearts: post.hearts
         }));
 
         return NextResponse.json(response);
