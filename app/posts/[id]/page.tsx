@@ -1,7 +1,7 @@
 import { ViewPostPage } from "@/components/post-page";
 import { prisma } from "@/lib/prisma";
 
-import {remark} from 'remark';
+import { remark } from 'remark';
 import strip from 'strip-markdown';
 
 type Props = {
@@ -26,7 +26,10 @@ export async function generateMetadata({ params }: Props) {
     if (!post) return {
         title: "Post Not Found | HobbyHub",
     }
-    const text = await remark().use(strip).process(post.content.substring(0, 157));
+    const text = await remark().use(strip).process(post.content.substring(0, 157)).toString();
+
+    // Remove new lines.
+    text.replace(/[\r\n]+/g, ' ');
 
     if(post.media.length > 0) {
         return {
