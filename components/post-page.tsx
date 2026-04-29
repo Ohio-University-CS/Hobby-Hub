@@ -95,7 +95,7 @@ export const ViewPostPage = () => {
     const toggleHeart = async () => {
         if (!post) return;
 
-        if (!user.id) {
+        if(!user?.id) {
             toast.error("You must be logged in to heart posts");
             return;
         }
@@ -134,7 +134,7 @@ export const ViewPostPage = () => {
         );
     }
 
-    const isHeartedByMe = post.hearts.some((h: { userId: string }) => h.userId === user.id);
+    const isHeartedByMe = post.hearts.some((h: { userId: string }) => h.userId === user?.id);
     const userColor = getUserColor(post.user?.id || "default");
 
     return (
