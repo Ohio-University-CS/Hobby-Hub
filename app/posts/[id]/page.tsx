@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: Props) {
     if (!post) return {
         title: "Post Not Found | HobbyHub",
     }
-    const text = await remark().use(strip).process(post.content.substring(0, 157)).toString();
+    const parsedMarkdown = await remark().use(strip).process(post.content.substring(0, 157));
+    const text = parsedMarkdown.toString();
 
     // Remove new lines.
     text.replace(/[\r\n]+/g, ' ');
