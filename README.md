@@ -28,6 +28,8 @@ Moderation of post content is done through OpenAI.
 - Profile Management - Delete Account, Profile Picture, User Body, Interests
 - Interest-based feed filtering for user interests discoverability.
 - Markdown Sanitization to prevent HTML exploits.
+- AI-based moderation for recognizing sexual and discriminatory content in images and content.
+- Account Login / Register / Delete
 
 ## Coming soon:
 - Nightshade integration to prevent AI theft.
