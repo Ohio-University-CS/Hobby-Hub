@@ -1,12 +1,12 @@
 ## This is the Hobby Hub Development Repository for CS 3560 at Ohio University
 
-## Contributors/Roles:
+### Contributors/Roles:
 - Collin Blumenauer - Development, Database Management, Deployment
 - James Sparks - Design, Testing, Hosting
 
-### [Hobby Hub](https://hobbyhub.24sparja.com/) is a welcoming online space for hobbyists. Content is promoted on popularity and user interests.
+## [Hobby Hub](https://hobbyhub.24sparja.com/) is a welcoming online space for hobbyists. Content is promoted on popularity and user interests.
 
-### Walkthrough:
+## Walkthrough:
 
 On page open, you will be sent to a landing page with the option to login or explore.
 Exploring, let's you search for interests and content you want, without an account.
@@ -21,7 +21,7 @@ Posts can have media attachments and will be displayed as a zoomable carousel.
 
 Moderation of post content is done through OpenAI.
 
-## Features:
+### Features:
 - Post Creation / Editing
 - Post Media and Markdown Body
 - Post Interactions - Likes / Views
@@ -31,19 +31,30 @@ Moderation of post content is done through OpenAI.
 - AI-based moderation for recognizing sexual and discriminatory content in images and content.
 - Account Login / Register / Delete
 
-## Coming soon:
+### Coming soon:
 - Nightshade integration to prevent AI theft.
 - AI defense robots.txt and cloudflare zero-trust, maze.
 - Communities
 - Comments
 
-## Known Issues:
+### Known Issues:
 - Post thumbnails are not downscaled, meaning bandwidth is high. - Will be fixed sooon.
 - No Reset Password, 2FA, or Email Verification - Will be fixed soon.
 
-## Examples:
-[Cat](https://hobbyhub.24sparja.com/posts/789c1f4f-0fde-4349-bf52-8d05dc1432cc?url=1)
-[Technical Post](https://hobbyhub.24sparja.com/posts/cf9fd323-4581-4e86-8961-020e998763c3?url=4)
+## Demonstration:
+
+### Examples:
+### [Demonstration on Youtube, Quick Rundown](https://youtu.be/1FKUi9XvZ80)
+
+[Cat Post on HobbyHub](https://hobbyhub.24sparja.com/posts/789c1f4f-0fde-4349-bf52-8d05dc1432cc?url=1)
+
+[Technical Post on HobbyHub](https://hobbyhub.24sparja.com/posts/cf9fd323-4581-4e86-8961-020e998763c3?url=4)
+
+<img width="920" height="605" alt="ProfilePanel" src="https://github.com/user-attachments/assets/0cec0801-f052-48a2-9832-3701ce59803e" />
+<img width="940" height="614" alt="InterestsPanel" src="https://github.com/user-attachments/assets/0d86730c-cc88-4520-8bd7-481649ad0315" />
+<img width="925" height="635" alt="ExplorePanel" src="https://github.com/user-attachments/assets/8ccc4155-ad34-473a-9473-34eebecf96c2" />
+<img width="916" height="622" alt="ScreenshotExample-Post" src="https://github.com/user-attachments/assets/5e20bacf-dcc8-4bd0-b893-f47841d19b13" />
+<img width="919" height="643" alt="PostManagementPanel" src="https://github.com/user-attachments/assets/8009f2ee-aaae-4e5c-a084-9d7b69d580b6" />
 
 ## Development: Getting Started
 ### PROJECT SETUP / UPDATING
